@@ -1,0 +1,789 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+@import './custom.css';
+@import './admin-table.css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    /*--font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';*/
+
+    --font-sans: 'Open Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
+
+    --color-accent: var(--color-neutral-800);
+    --color-accent-content: var(--color-neutral-800);
+    --color-accent-foreground: var(--color-white);
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-white);
+        --color-accent-content: var(--color-white);
+        --color-accent-foreground: var(--color-neutral-800);
+    }
+}
+
+/*@layer base {
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}*/
+
+@layer base {
+
+    /* ============================
+       GLOBAL TYPOGRAPHY (APP WIDE)
+       ============================ */
+
+    html {
+        font-size: 14px;       /* Global base size */
+    }
+
+    body {
+        font-family: "Open Sans", ui-sans-serif, system-ui, sans-serif;
+        font-weight: 400;      /* Professional admin feel */
+        line-height: 1.45;     /* Better readability for tables & lists */
+        color: #111827;        /* Neutral readable text */
+    }
+
+    /* ============================
+       BASE RESET YOU ALREADY HAD
+       ============================ */
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply  !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
+
+/* \[:where(&)\]:size-4 {
+    @apply size-4;
+} */
+/* ================================
+   Examiner Listing UI
+   ================================ */
+
+.examiner-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.examiner-loader-box {
+    background: #ffffff;
+    padding: 25px 40px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 320px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+.examiner-table {
+    font-size: 14px;
+    background: #fff;
+}
+
+.examiner-table th {
+    background: #f1f3f5;
+    font-weight: 600;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.examiner-table td {
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.examiner-table th,
+.examiner-table td {
+    padding: 8px 10px;
+}
+
+.examiner-type {
+    background-color: #17a2b8;
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+
+.examiner-card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 15px;
+}
+
+.examiner-card-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.examiner-actions button {
+    margin-left: 5px;
+}
+
+.examiner-table thead th {
+    background: #e9ecef;
+    color: #212529;
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom: 2px solid #ced4da;
+    text-transform: none;
+}
+
+.examiner-table th:nth-child(1),
+.examiner-table td:nth-child(1) {
+    width: 220px;   /* College */
+}
+
+.examiner-table th:nth-child(2),
+.examiner-table td:nth-child(2) {
+    width: 220px;   /* Department */
+}
+
+.examiner-table th:nth-child(3),
+.examiner-table td:nth-child(3) {
+    width: 260px;   /* Name */
+}
+
+.examiner-table th:nth-child(4),
+.examiner-table td:nth-child(4) {
+    width: 180px;   /* Designation */
+}
+
+.examiner-table th:nth-child(5),
+.examiner-table td:nth-child(5) {
+    width: 80px;
+    text-align: center;
+}
+
+.examiner-table th:nth-child(6),
+.examiner-table td:nth-child(6) {
+    width: 130px;
+}
+
+.examiner-table th:nth-child(7),
+.examiner-table td:nth-child(7) {
+    width: 80px;
+    text-align: center;
+}
+
+.examiner-table th:nth-child(8),
+.examiner-table td:nth-child(8) {
+    width: 70px;
+    text-align: center;
+}
+
+.examiner-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.examiner-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.examiner-footer .pagination {
+    margin: 0;
+}
+
+.examiner-footer .page-item .page-link {
+    padding: 4px 10px;
+    font-size: 13px;
+}
+
+/* ==========================================
+ | MODAL FORM – FINAL PRODUCTION PARITY
+ ========================================== */
+
+.modal-form {
+    padding-top: 8px;
+}
+
+/* ROW */
+.modal-form .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+/* LABEL */
+.modal-form .form-group label {
+    width: 25%;
+    text-align: right;
+    padding-right: 14px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+}
+
+/* INPUT WRAPPER */
+.modal-form .form-group > div,
+.modal-form .form-group > input,
+.modal-form .form-group > select {
+    width: 75%;
+}
+
+/* INPUTS */
+.modal-form .form-control {
+    height: 42px;
+    font-size: 14px;
+    border-radius: 6px;
+}
+
+/* CHOSEN – FORCE SAME SIZE AS INPUT */
+.modal-form .chosen-container-single .chosen-single {
+    height: 42px;
+    line-height: 40px;
+    border-radius: 6px;
+    font-size: 14px;
+    padding-left: 12px;
+}
+
+.modal-form .chosen-container {
+    width: 100% !important;
+}
+
+.modal-form .chosen-container-single .chosen-single div b {
+    margin-top: 8px;
+}
+
+/* MODAL FOOTER BUTTON ALIGNMENT */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ==========================
+ | RESPONSIVE (MOBILE)
+ ========================== */
+@media (max-width: 768px) {
+    .modal-form .form-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .modal-form .form-group label {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 6px;
+        padding-right: 0;
+    }
+
+    .modal-form .form-group > div,
+    .modal-form .form-group > input,
+    .modal-form .form-group > select {
+        width: 100%;
+    }
+}
+
+/* Force proper alignment inside modal forms */
+.modal-form,
+.form-row,
+.form-control-wrapper {
+    text-align: left;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    align-items: start;   /* IMPORTANT */
+    column-gap: 16px;
+    margin-bottom: 16px;
+}
+
+/* ===== MODAL FORM STANDARD ===== */
+
+.modal-form,
+.form-row,
+.form-control-wrapper {
+    text-align: left;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    align-items: start;
+    column-gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-label {
+    font-weight: 500;
+    padding-top: 10px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.form-control-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-error {
+    margin-top: 4px;
+    font-size: 0.875rem;
+    color: #dc2626;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-label {
+        text-align: left;
+        padding-top: 0;
+    }
+}
+
+.error {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    color: red;
+}
+
+/* Force all inputs & chosen to same height */
+.form-control,
+.chosen-container .chosen-single {
+    height: 42px;
+    line-height: 42px;
+    border-radius: 8px;
+}
+
+/* Fix chosen text vertical alignment */
+.chosen-container .chosen-single span {
+    line-height: 42px;
+}
+
+.form-control,
+.form-select {
+    height: 35px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+}
+
+/* ============================
+ | FORM VALIDATION ERRORS
+ ============================ */
+.form-error {
+    color: #dc2626;          /* Tailwind red-600 */
+    font-size: 0.875rem;     /* text-sm */
+    margin-top: 0.25rem;     /* mt-1 */
+    line-height: 1.25rem;
+}
+
+.watermark {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.08;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.watermark img {
+    width: 70%;
+    max-width: 500px;
+}
+
+table th.col-code,
+table td.col-code {
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/* ===============================
+   ADMIN TABLE – ACTION COLUMN FIX
+   =============================== */
+.actions-col {
+    white-space: normal !important;
+}
+
+/* =========================================================
+   GLOBAL UI POLISH – ENTERPRISE GRADE
+   ========================================================= */
+
+/* -------------------------------
+   TABLES (Cleaner, denser, readable)
+-------------------------------- */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table {
+    font-size: 0.85rem;
+}
+
+.table th {
+    font-weight: 600;
+    color: #374151;
+    background: #f8fafc;
+    font-size: 0.95rem;
+}
+
+.table td {
+    color: #111827;
+}
+
+.table-sm th,
+.table-sm td {
+    padding: 6px 10px;   /* tighter rows, more data visible */
+}
+
+.table-bordered td,
+.table-bordered th {
+    border-color: #e5e7eb;
+}
+
+/* Hover effect for rows */
+.table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* -------------------------------
+   BUTTONS (Modern admin look)
+-------------------------------- */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.35rem 0.75rem;
+}
+
+.btn-sm {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.6rem;
+}
+
+.btn-outline-primary {
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.btn-outline-primary:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+/* Neutral action buttons */
+.btn-light {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+}
+
+/* -------------------------------
+   INPUTS (Cleaner alignment)
+-------------------------------- */
+.form-control,
+.form-select {
+    font-size: 0.9rem;
+    border-radius: 6px;
+    border-color: #e5e7eb;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+/* -------------------------------
+   BADGES
+-------------------------------- */
+.badge {
+    font-weight: 500;
+    padding: 0.35em 0.6em;
+    font-size: 0.8rem;
+}
+
+/* -------------------------------
+   CARDS
+-------------------------------- */
+.card {
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.card-header {
+    background: #f9fafb;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    padding-bottom:5px;
+    padding-top: 5px;
+}
+
+/* -------------------------------
+   DRAWER POLISH
+-------------------------------- */
+
+/* Make drawer feel premium */
+.drawer,
+.fixed.top-0.right-0 {
+    border-left: 1px solid #e5e7eb;
+}
+
+/* Drawer content spacing */
+.drawer h5 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.drawer .form-control {
+    font-size: 0.9rem;
+}
+
+/* Slot meta box */
+.drawer-meta {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+/* Drawer table spacing */
+.drawer table td {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+/* -------------------------------
+   PAGINATION (Compact + clean)
+-------------------------------- */
+.pagination {
+    font-size: 0.85rem;
+}
+
+.page-link {
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+}
+
+.page-item.active .page-link {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+
+
+/* -------------------------------
+   ICON ACTION BUTTONS (future)
+-------------------------------- */
+.action-icon {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.action-icon:hover {
+    background: #f1f5f9;
+}
+
+/* -------------------------------
+   GENERAL RHYTHM
+-------------------------------- */
+h1, h2, h3 {
+    letter-spacing: -0.2px;
+}
+
+.small-text {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+
+/* =========================================================
+   ACTION ICON SYSTEM (Enterprise Style)
+   ========================================================= */
+
+.slot-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.action-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.action-btn:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+/* Primary action (Swap) */
+.action-btn.primary {
+    color: #2563eb;
+    border-color: #dbeafe;
+}
+
+.action-btn.primary:hover {
+    background: #eff6ff;
+}
+
+/* Warning / lock */
+.action-btn.warning {
+    color: #b45309;
+}
+
+/* Success / repeat */
+.action-btn.success {
+    color: #047857;
+}
+
+/* Muted */
+.action-btn.muted {
+    color: #6b7280;
+}
+
+/* Tooltip style (simple native title) */
+.action-btn[title] {
+    position: relative;
+}
+
+
+/* =========================================================
+   STATUS SYSTEM
+   ========================================================= */
+
+.status-pill {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.status-assign {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.status-unassigned {
+    background: #fffbeb;
+    color: #b45309;
+}
+
+.status-contact {
+    background: #f5f3ff;
+    color: #6d28d9;
+}
+
+.status-approved {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.pagination {
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pagination li {
+    display: inline-flex !important;
+}
+
+/* ===========================
+   GLOBAL SUB HEADER
+   =========================== */
+
+.sub-header {
+    @apply flex justify-between items-center px-4;
+}
+
+.sub-header h1 {
+    @apply text-lg font-semibold text-blue-700;
+}
+
+.sub-header h1 span {
+    @apply text-gray-400;
+}
+
+.sub-header h1 span.separator {
+    @apply mx-1;
+}

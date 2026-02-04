@@ -1,0 +1,417 @@
+id,mas_department_stream_id,mas_department_name
+1,4,Accident & Emergency Medicine
+2,4,Advance Techniques In Radiation Oncology
+3,4,Advanced Orthopaedic Trauma
+4,6,Aerospace Medicine
+5,4,Aesthetic Dentistry
+6,4,Aesthetic Dermatology
+7,4,Aesthetic Facial Surgery
+8,5,Agada Tantra
+9,5,Ain-Uzn-Anaf-O-Halaque
+10,4,Allergy And Allergen - Specific Immunotherapy
+11,3,"Allied Health Sciences, Forensic Medicine And Toxicology, Pharmacology"
+12,11,Amraze Ain-Uzan-Anaf-Wo-Halaq
+13,11,Amraze Atfal
+14,5,Amraze Jild Tazeeniyat
+15,11,Amraze Jild-Wa-Tazeeniyat
+16,12,Anaesthesia
+17,2,Anaesthesia
+18,1,ANAESTHESIA AND OPERATION THEATER TECHNOLOGY
+19,6,Anaesthisiology
+20,1,Anatomy
+21,2,Anatomy
+22,3,Anatomy
+23,6,Anatomy
+24,4,Andrology
+25,4,Anesthesia Technology
+26,4,Arthroplasty
+27,1,AUDIOLOGY AND SPEECH LANGUAGE PATHOLOGY
+28,4,Ayurveda Sidhanta
+29,4,Bio- Technology
+30,1,Biochemistry
+31,2,Biochemistry
+32,6,Biochemistry
+33,4,Breast Cancer Diseases
+34,4,Breast Surgery
+35,8,Bulk Drugs
+36,0,Cardiac Anaesthesia
+37,6,Cardiac Anaesthesia
+38,1,Cardiac Care Technology
+39,4,Cardiac Care Technology
+40,9,Cardio Pulmonary & Vascular Physiotherapy
+41,6,Cardio Thoracic Surgery
+42,0,Cardio Vascular & Thoracic Surgery
+43,4,Cardio Vascular Anaesthesia
+44,6,Cardiology
+45,4,Cardiovascular Imaging
+46,0,Child Health Nursing
+47,7,Child Health Nursing
+48,4,Child Psychiatry
+49,4,Cleft Lip And Palate Surgery
+50,4,Clinical Biochemistry
+51,4,Clinical Embryology And Assisted Reproductive Technology (Embryology And Andrology)
+52,4,Clinical Paediatric Cardiology
+53,8,Clinical Pharmacy
+54,8,Clinical Practice And Research
+55,4,Clinical Psycho Oncology (Paediatric)
+56,4,Clinical Psycho-oncology
+57,4,Clinical Psychology
+58,4,Clinical Research
+59,1,Clinical Research
+60,2,Community Dentistry
+61,2,Community Health
+62,7,Community Health
+63,7,Community Health Nursing
+64,3,Community Medicine
+65,10,Community Medicine
+66,6,Community Medicine
+67,10,Community Medicine Research Methodology & Biostatics
+68,2,Conservative Dentistry
+69,2,Conservative Dentistry & Endodontics
+70,4,Corneal & Refractive Surgery
+71,8,Cosmeceutics
+72,4,Cranio-maxillofacial Surgery
+73,6,Critical Care Medicine
+74,6,Dentistry
+75,2,Department Of Dentistry
+76,8,Department Of Pharmaceutical Chemistry
+77,8,Department Of Pharmaceutical Quality Assurance
+78,8,Department Of Pharmaceutics
+79,8,Department Of Pharmacognosy
+80,8,Department Of Pharmacology
+81,8,Department Of Pharmacy Practice
+82,4,Dermato Pathology
+83,4,Dermato Surgery
+84,6,Dermatology
+85,4,Diabetology
+86,5,Dravyaguna
+87,4,Echocardiography
+88,1,EMERGENCY AND TRAUMA CARE TECHNOLOGY
+89,1,Emergency Medicine
+90,6,Emergency Medicine
+91,6,ENDOCRINOLOGY
+92,2,Endodontics And Conservative Dentistry
+93,4,Endoscopic Ultrasound
+94,4,Endovascular Neurosurgery
+95,3,"Energy Medicine (Acupuncture And Acupressure, Colour And Magneto Biology"
+96,4,ENT - Otology And Hearing Implants
+97,6,Family Medicine
+98,3,"Fasting, Dietetics, Nutrition And Medicinal Herbs."
+99,4,Fellowship In Clinical Psycho-oncology
+100,4,Fellowship In Orthopedic Oncology
+101,4,Feto Maternal Medicine
+102,4,Feto Maternal Medicine Dup
+103,0,Fon - Fundamental Of Nursing
+104,10,Forensic Medicine & Toxicology
+105,6,FORENSIC MEDICINE AND TOXICOLOGY
+106,4,Forensic Odontology
+107,7,Foundation Of Nursing
+108,4,Functional Neurosurgery
+109,6,Gastro Enterology
+110,4,Gastro Intestinal Surgery
+111,1,General Medicine
+112,2,General Medicine
+113,6,General Medicine
+114,1,General Surgery
+115,2,General Surgery
+116,6,General Surgery
+117,6,GERIATRIC MEDICINE
+118,6,Geriatrics
+119,4,Gi Endoscopy And Medical Gastroenterology
+120,4,Glaucoma
+121,6,Gynaec Oncology
+122,6,GYNAECOLOGIC ONCOLOGY
+123,4,Gynaecological Endoscopy
+124,4,Gynaecological Oncology
+125,6,Gynaecological Oncology
+126,10,Gynaecology & Obstetrics
+127,4,Head & Neck Cancer Sugery
+128,6,Head & Neck Cancer Sugery
+129,6,Head & Neck Surgery
+130,4,Head And Neck Oncology
+131,6,Hematology & Blood Transfusion
+132,4,High Risk Pregnancy
+133,4,High Risk Pregnancy Dup
+134,10,Homeopathic Pharmachy
+135,10,Homeopathic Pharmacy
+136,10,Homeopathic Repertory & Case Taking
+137,4,Homoeopathic Pharmacy
+138,8,Hospital & Clinical Pharmacy
+139,1,Hospital Administration
+140,6,Hospital Administration
+141,4,Hospital Infection Prevention And Control
+142,10,Human Anatomy
+143,10,Human Physiology And Bio-chemistry
+144,3,Hydrotherapy And Mudtherapy
+145,11,Ilaj Bid Tadbeer
+146,4,Ilaj Bit Tadbeer
+147,11,Ilmul Advia
+148,4,Ilmul Advia
+149,4,Ilmul Atfal
+150,11,Ilmul Jarahat
+151,4,Ilmul Qabalat.wa.amraz.e.niswa.
+152,11,Ilmul Saidla
+153,4,Ilmul Saidla
+154,6,Immuno Haematology & Blood Transfusion
+155,4,Implant Dentistry
+156,4,Implantology Medicine
+157,8,Industrial Pharmacy
+158,4,Intensive Care Medicine
+159,4,Interventional Cardiology
+160,4,Interventional Nephrology
+161,4,Jarahat
+162,4,Kaumara Bhritya
+163,5,Kayachikitsa
+164,4,Kayachikitsa
+165,5,Koumara Bhritya
+166,5,Kriya Shareer
+167,11,Kulliyat
+168,12,Kulliyat Umoor-e-tabiya
+169,4,Laparoscopy Gynaecology
+170,7,Librarian
+171,2,Library
+172,5,Library
+173,1,Library
+174,3,Library
+175,4,Library
+176,6,Library
+177,7,Library
+178,8,Library
+179,9,Library
+180,10,Library
+181,11,Library
+182,12,Library
+183,6,Library And Info. Science
+184,10,Library Science
+185,4,"Limb Lengthening, Deformity Correction And Reconstructive Surgery"
+186,4,Liver Transplant & HPB Surgery
+187,11,Mahiyatul Amraz
+188,5,Manasaroga
+189,3,Manipulative Therapies And Physical Medicine With Rehabilitation.
+190,5,Mano Vijnan
+191,10,Materia Medica
+192,4,Maxillo-facial Trauma
+193,4,Md Diet & Nutrition (Naturopathy & Yoga)
+194,1,Med Lab Technology
+195,1,Medcal Imaging Technology
+196,0,Medical & Surgical Nursing
+197,7,Medical & Surgical Nursing
+198,1,Medical Imaging Technology
+199,1,Medical Laboratory Technology
+200,6,Medical Oncology
+201,4,Medical Retina
+202,1,Medical Surgical
+203,7,Medical Surgical
+204,8,Medicinal Chemistry
+205,0,Mental Health Nursing
+206,7,Mental Health Nursing
+207,1,Microbiology
+208,2,Microbiology
+209,6,Microbiology
+210,4,Microbiology & Immunology
+211,4,Minimal Access Surgical Oncology
+212,4,Minimal Invasive Surgery (Gynaecology)
+213,4,Minimal Invasive Surgery (Surgery)
+214,4,Moalijat
+215,11,Moalijat
+216,3,"Modern Diagnostic Methods, Obstetrics And Gynaecology"
+217,9,Movement Sciences
+218,5,Munafe Ul Aza
+219,11,Munafeul Aza
+220,9,Musculoskeletal Sciences
+221,5,Naturopathy
+222,3,"Naturopathy Diagnostic Methods, Clinical Naturopathy And Yoga Therapy And Research Methodology."
+223,4,Neonatal Intensive Care
+224,6,Neonatology
+225,6,Nephrology
+226,4,Neuro And Vascular Interventional Radiology
+227,1,Neuro Science Technology
+228,9,Neurological Sciences
+229,6,Neurology
+230,1,Neuroscience Technology
+231,6,Neurosurgery
+232,11,Niswan Wa Qabala
+233,4,Non-invasive Cardiology
+234,6,Nuclear Medicine
+235,7,Nurse Practitioner In Critical Care (NPCC)
+236,7,Obc Nursing
+237,7,OBG
+238,6,OBG
+239,7,OBG Nursing
+240,0,OBG Nursing
+241,1,Occupational Therapy
+242,4,Onco Imaging
+243,6,ONCO PATHOLOGY
+244,4,Onco Pharmacy
+245,4,Onco-deglutology
+246,4,Oncology Nutrition
+247,1,Operation Theatre Technology
+248,1,Opthalamology
+249,6,Opthalmology
+250,1,Optometry
+251,4,Optometry
+252,2,Oral & Maxillofacial Pathology & Oral Microbiology
+253,2,Oral & Maxillofacial Surgery (Oral Surgery)
+254,2,Oral And Maxillofacial Surgery
+255,2,Oral Biology
+256,4,Oral Biologyy
+257,2,Oral Medicine & Radiology (Oral Medicine)
+258,2,Oral Medicine And Radiology
+259,4,Oral Onco Surgery
+260,6,Oral Onco Surgery
+261,2,Oral Pathology
+262,10,Organon Of Medicine & Homeopathic Philosophy
+263,10,Organon Of Medicine & Homeopathyic Philosophy & Fundamentals Of Psychology
+264,2,Orthodontics
+265,2,Orthodontics And Dentofacial Orthopedics
+266,6,Orthopaedics
+267,4,Orthopedic Oncology
+268,1,Orthopedics
+269,6,OTO-RHINO-LARYNGOLOGY
+270,4,Otology And Hearing Implants
+271,7,Paediatric
+272,4,Paediatric Anaesthesia
+273,4,Paediatric And Adolescent Endocrinology
+274,4,Paediatric Cardiac Surgery
+275,6,PAEDIATRIC CARDIOLOGY
+276,4,Paediatric Dermatology
+277,4,Paediatric Genetics
+278,4,Paediatric Intensive Care
+279,4,Paediatric Medical Oncology
+280,4,Paediatric Minimal Invasive Surgery
+281,6,Paediatric Nephrology
+282,4,Paediatric Nephrology
+283,4,Paediatric Neurology
+284,4,Paediatric Neurology Dup
+285,6,Paediatric Oncology
+286,4,Paediatric Ophthalmology And Strabismus
+287,4,Paediatric Orthopedics
+288,4,Paediatric Otorhinolaryngology
+289,4,Paediatric Pulmonology
+290,4,Paediatric Radiology
+291,6,Paediatric Surgery
+292,4,Paediatric Urology
+293,1,PAEDIATRICS
+294,9,PAEDIATRICS
+295,10,PAEDIATRICS
+296,6,PAEDIATRICS
+297,2,Paedodontics & Perventive Dentistry (Paedodontia)
+298,4,Palliative Care
+299,6,Palliative Care
+300,5,Panchakarma
+301,1,Pathology
+302,2,Pathology
+303,6,Pathology
+304,10,Pathology & Microbiology
+305,3,Pathology And Microbiology
+306,2,Pediatrics And Preventive Dentistry
+307,1,Perfusion Technology
+308,6,Perinatal Medicine (Neonatology)
+309,2,Periodontics
+310,2,Periodontology
+311,4,Phaco & Refractive Surgery
+312,4,Phacoemulsification And Refractive Surgery
+313,8,Pharma Drug Discovery
+314,8,Pharmaceutical Administration
+315,8,Pharmaceutical Analysis
+316,8,Pharmaceutical Biotechnology
+317,8,Pharmaceutical Chemistry
+318,8,Pharmaceutical Quality Assurance
+319,8,Pharmaceutical Regulatory Affair
+320,8,Pharmaceutical Technology
+321,8,Pharmaceutics
+322,8,Pharmacia Kinetic
+323,8,Pharmacognosy
+324,1,Pharmacology
+325,2,Pharmacology
+326,8,Pharmacology
+327,6,Pharmacology
+328,8,Pharmacy Practice
+329,8,Pharmacy Practice Dup
+330,3,Philopsophy Of Naturopathy And Principles Of Yoga
+331,4,Philosophy & Oraganan Of Medicine
+332,1,Physical Education
+333,2,Physical Education
+334,3,Physical Education
+335,5,Physical Education
+336,6,Physical Education
+337,7,Physical Education
+338,8,Physical Education
+339,9,Physical Education
+340,10,Physical Education
+341,11,Physical Education
+342,12,Physical Education
+343,4,Physical Education
+344,6,PHYSICAL MEDICINE AND REHABILITATION
+345,1,Physiology
+346,2,Physiology
+347,6,Physiology
+348,3,Physiology And Biochemistry
+349,9,Physiotherapy
+350,1,Physiotherapy
+351,6,Plastic Surgery
+352,8,Practice Of Medicine
+353,10,Practice Of Medicine
+354,10,Practice Of Medicine With Essentials Of Pharmocology
+355,5,Prasooti Tantra & Streeroga
+356,5,Prasuti & Streeroga
+357,2,Preventive And Community Dentistry
+358,1,Prosthetics And Orthotics
+359,2,Prosthetics And Orthotics
+360,2,Prosthodontics
+361,2,Prosthodontics  And Crown And Bridge
+362,4,Psychiatric
+363,1,Psychiatric Social work
+364,6,Psychiatry
+365,1,Psychiatry
+366,10,Psychiatry
+367,7,Psychiatry
+368,1,Psychology
+369,1,Public Health
+370,4,Public Health
+371,2,Public Health  Dentistry
+372,6,Pulmonary Medicine
+373,4,Quality Assurance
+374,5,Rachana Shareer
+375,6,Radiation Oncology
+376,4,Radiation Oncology And Brachytherapy
+377,1,Radiation Physics
+378,6,Radiodiagnosis
+379,1,Radiodiagnosis
+380,1,Radiotherapy
+381,1,Radiotherapy Technology
+382,5,Rasashastra
+383,5,Rasashastra & Bhaishajya Kalpana
+384,4,Renal Dialysis
+385,1,Renal Dialysis Technology
+386,4,Repertory
+387,4,Reproductive Medicine
+388,5,Research Methodology And Biostatistics
+389,1,Respiratary Care Technology
+390,6,Respiratory Medicine
+391,1,Respiratory Medicine
+392,5,Roga Nidana & Vikriti Vignana
+393,5,Roganindan
+394,5,Samhita Siddhanta
+395,5,Samitha
+396,0,Sanskrit
+397,5,Shalakya Tantra
+398,5,Shalya Tantra
+399,4,Sociology
+400,4,Spine Surgery
+401,6,Sports Medicine
+402,9,Sports Sciences
+403,10,Surgery
+404,6,Surgical Gastroenterology
+405,6,Surgical Oncology
+406,5,Swastha Vritta
+407,11,Tahfuzi Wa Samaji Tibb
+408,11,Tashree Ul Badan
+409,13,Test Department
+410,6,Transfusion Medicine
+411,4,Tumour Pathology
+412,6,Urology
+413,6,Vascular Surgery
+414,4,Vitreo Retinal Surgery
+415,5,Yoga
+416,3,Yoga And Mind Body Medicine

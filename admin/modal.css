@@ -1,0 +1,30 @@
+
+
+.modal-header .close {
+font-size: 32px
+}
+
+
+
+.modal.aside-hz .aside-trigger.ace-settings-btn {
+margin-left: -20px
+}
+
+
+
+.modal.aside-top .aside-trigger.ace-settings-btn {
+border-radius: 0 0 6px 6px !important
+}
+
+
+
+.modal.aside-bottom .aside-trigger.ace-settings-btn {
+border-radius: 6px 6px 0 0 !important
+}
+
+
+
+.code-modal.onpage-help-modal .modal-header {
+padding-top: 6px;
+padding-bottom: 6px
+}

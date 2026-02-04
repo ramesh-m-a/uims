@@ -1,0 +1,69 @@
+<div class="space-y-4">
+
+    {{-- BREADCRUMB --}}
+    @include('partials.breadcrumb', [
+        'route' => $pageRoute,
+        'title' => '{{Entity}}',
+        'mode'  => $this->breadcrumbMode() ?? 'View / Update'
+    ])
+
+    {{-- PAGE TITLE --}}
+    <div class="flex justify-between items-center">
+        <h1 class="font-normal text-black-400">
+            {{Entity}}
+            <span class="text-black-350 mx-1">››</span>
+            <span class="text-black-350">View / Update</span>
+        </h1>
+
+        @if($this->can('create'))
+            <button wire:click="create" class="btn btn-primary">
+                Add {{Entity}}
+            </button>
+        @endif
+    </div>
+
+    {{-- TABLE --}}
+    @include('livewire.master._crud-table', [
+        'rows' => ${{plural}},
+        'columns' => $this->columns(),
+        'canEdit' => $this->can('edit'),
+        'canDelete' => $this->can('delete'),
+        'canRestore' => $this->can('restore'),
+    ])
+
+    {{-- MODAL --}}
+    <x-master.modal
+        :show="$showModal"
+        :title="$editingId ? 'Edit {{Entity}}' : 'Add {{Entity}}'"
+        onSave="save"
+        onCancel="cancelEdit"
+    >
+        <x-master.form-row
+            label="Name"
+            name="form.mas_{{slug}}_name"
+            required
+        >
+            <input
+                type="text"
+                class="form-control"
+                wire:model.defer="form.mas_{{slug}}_name"
+            />
+        </x-master.form-row>
+
+        @if($editingId)
+            <x-master.form-row
+                label="Status"
+                name="form.mas_{{slug}}_status_id"
+            >
+                <select
+                    class="form-select"
+                    wire:model.defer="form.mas_{{slug}}_status_id"
+                >
+                    <option value="1">Active</option>
+                    <option value="2">In Active</option>
+                </select>
+            </x-master.form-row>
+        @endif
+    </x-master.modal>
+
+</div>

@@ -1,0 +1,50 @@
+
+
+.ajax-loading-overlay.ajax-overlay-body > .ajax-loading-icon {
+left: 8px;
+top: 8px
+}
+
+
+
+body.mob-safari .sidebar.sidebar-fixed {
+top: 45px
+}
+
+
+
+body.mob-safari .sidebar.h-sidebar.no-gap + .main-content .sidebar.sidebar-fixed:not(.h-sidebar) {
+top: 114px
+}
+
+
+
+body.mob-safari .sidebar.h-sidebar.menu-min + .main-content .sidebar.sidebar-fixed:not(.h-sidebar) {
+top: 106px
+}
+
+
+
+body.mob-safari .sidebar.h-sidebar.menu-min.no-gap + .main-content .sidebar.sidebar-fixed:not(.h-sidebar) {
+top: 89px
+}
+
+
+
+body.mob-safari .breadcrumbs-fixed {
+top: 45px
+}
+
+
+
+.itemdiv > .body > .time .ace-icon {
+font-size: 14px;
+font-weight: 400
+}
+
+
+
+.itemdiv > .body > .text > .ace-icon:first-child {
+color: #DCE3ED;
+margin-right: 4px
+}

@@ -1,0 +1,5 @@
+id,mas_bank_branch_bank_id,mas_bank_branch_branch_name,mas_bank_branch_address_1,mas_bank_branch_address_2,mas_bank_branch_city,mas_bank_branch_state,mas_bank_branch_status_id,mas_ifsccode_number,mas_ifsccode_micr,error_reason
+83881,117,"sbi om nagar ","OPP. GOVERNMENT PRESSNOOR COMPLEX ,MSK MILL  ROAD  , GULBARGA ,PIN - 585102",,"Kalaburagi 
+","array_combine(): Argument #1 ($keys) and argument #2 ($values) must have the same number of elements"
+",KARNATAKA,1,SBIN0004410,
+","array_combine(): Argument #1 ($keys) and argument #2 ($values) must have the same number of elements"

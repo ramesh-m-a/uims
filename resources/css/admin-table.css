@@ -1,0 +1,376 @@
+/* =========================================================
+   ADMIN TABLE SYSTEM
+   Used across ALL Livewire + Blade listing screens
+   ========================================================= */
+
+/* -------------------------------
+   CARD WRAPPER
+-------------------------------- */
+.admin-card {
+    background: #ffffff;
+    border: 1px solid #dfe3e8;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+/* -------------------------------
+   TABLE BASE
+-------------------------------- */
+.admin-table {
+    width: 100%;
+    font-size: 13px;
+    color: #212529;
+    background-color: #ffffff;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/* -------------------------------
+   TABLE HEADER
+-------------------------------- */
+.admin-table thead th {
+    background-color: #f8f8f8 !important; /* ramesh commented #eef1f4; */
+    color: #212529;
+    font-weight: 600;
+    border-bottom: 2px solid #d0d7de;
+    border-top: 1px solid #d0d7de;
+}
+
+/* Sticky header (large datasets) */
+.admin-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+/* -------------------------------
+   SORTABLE HEADERS
+-------------------------------- */
+.admin-table th.sortable {
+    cursor: pointer;
+}
+
+.admin-table th.sortable:hover {
+    background-color: #e2e6ea;
+}
+
+.admin-table th.sortable .sort-icon {
+    margin-left: 4px;
+    font-size: 11px;
+    color: #6c757d;
+}
+
+/* -------------------------------
+   TABLE BODY
+-------------------------------- */
+.admin-table tbody tr {
+    background-color: #ffffff;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.admin-table tbody td {
+    border-top: 1px solid #dee2e6;
+}
+
+/* -------------------------------
+   FILTER ROW
+-------------------------------- */
+.admin-table thead tr.filter-row th {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 6px 8px;
+}
+
+.admin-table thead tr.filter-row input,
+.admin-table thead tr.filter-row select {
+    width: 100%;
+    font-size: 12px;
+    padding: 3px 6px;
+}
+
+/* -------------------------------
+   BADGES (TYPE / STATUS)
+-------------------------------- */
+.admin-badge {
+    display: inline-block;
+    padding: 3px 5px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 4px;
+    color: #ffffff;
+}
+
+.admin-badge.info {
+    background-color: #17a2b8;
+}
+
+.admin-badge.success {
+    background-color: #82AF6F;
+}
+
+.admin-badge.warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.admin-badge.danger {
+    background-color: #dc3545;
+}
+
+/* -------------------------------
+   ACTION ICONS
+-------------------------------- */
+.admin-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+}
+
+.admin-actions .action-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.admin-actions .action-btn.edit {
+    color: #0d6efd;
+}
+
+.admin-actions .action-btn.delete {
+    color: #dc3545;
+}
+
+.admin-actions .action-btn.restore {
+    color: #ffc107;
+}
+
+.admin-actions .action-btn:hover {
+    opacity: 0.75;
+}
+
+/* -------------------------------
+   FOOTER / PAGINATION
+-------------------------------- */
+.admin-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.admin-footer .pagination {
+    margin: 0;
+}
+
+.admin-footer .page-link {
+    font-size: 13px;
+    padding: 4px 10px;
+}
+
+/* -------------------------------
+   RESPONSIVE
+-------------------------------- */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* -------------------------------
+   LOADER (GLOBAL)
+-------------------------------- */
+.admin-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-loader-box {
+    background: #ffffff;
+    padding: 25px 40px;
+    border-radius: 8px;
+    text-align: inherit;
+    min-width: 320px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+.admin-loader-box-row {
+    background: #ffffff;
+    padding: 25px 40px;
+    border-radius: 8px;
+    text-align: left;
+    min-width: 320px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+
+/* === Breadcrumb alignment fix === */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    color: #9ca3af;
+    padding: 0 6px;
+}
+
+.breadcrumb-item i.fa-home {
+    font-size: 14px;
+    margin-right: 4px;
+}
+
+/* === Modal button text fix === */
+.btn i {
+    pointer-events: none;
+}
+
+.btn span {
+    white-space: nowrap;
+}
+
+/* -------------------------------
+   COLUMN SEPARATORS (GLOBAL)
+-------------------------------- */
+.admin-table th,
+.admin-table td {
+    border-right: 1px solid #dee2e6;
+}
+
+/* =========================================================
+   ADMIN TABLE — STATUS / ENUM COLUMN ALIGNMENT
+   ========================================================= */
+.admin-table th.status-col,
+.admin-table td.status-col {
+    text-align: center;
+}
+
+/* FIRST COLUMN — LEFT BORDER */
+.admin-table th:first-child,
+.admin-table td:first-child {
+    border-left: 1px solid #dee2e6;
+}
+
+/* LAST COLUMN — REMOVE DOUBLE RIGHT BORDER */
+.admin-table th:last-child,
+.admin-table td:last-child {
+    border-left: 1px solid #dee2e6;
+}
+
+/* -------------------------------
+   BOTTOM BORDER (LAST ROW)
+-------------------------------- */
+.admin-table tbody tr:last-child td {
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* =========================================================
+   ADMIN — PER PAGE CONTROL (NO WRAP, RESPONSIVE)
+   ========================================================= */
+.admin-perpage {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+    .admin-perpage {
+        overflow-x: auto;
+    }
+}
+
+/* =========================================================
+   ADMIN — PER PAGE DROPDOWN (COMPACT)
+   ========================================================= */
+.admin-perpage-select {
+    height: 28px !important;
+    padding: 2px 6px !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+}
+
+/* -------------------------------
+   TABLE TEXT – FORCE UPPERCASE
+   (DATA CELLS ONLY)
+-------------------------------- */
+.admin-table tbody td {
+    text-transform: uppercase;
+}
+
+/* -------------------------------
+   FIX: ACTION ICONS VISIBILITY
+-------------------------------- */
+.admin-table tbody td:last-child,
+.admin-table tbody td:last-child * {
+    text-transform: none !important;
+}
+
+/* Make all table UI text uppercase safely */
+.admin-table,
+.admin-table th,
+.admin-table td,
+.admin-table span,
+.admin-table div,
+.admin-table a,
+.admin-table button {
+    text-transform: uppercase;
+}
+
+/* EXCEPTIONS: never touch form controls */
+.admin-table input,
+.admin-table select,
+.admin-table textarea {
+    text-transform: none;
+}
+
+.admin-table {
+    letter-spacing: 0.04em;
+}
+
+/* If a table cell contains code or pre, center it */
+.admin-table td:has(code),
+.admin-table td:has(pre) {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Make code blocks visually centered */
+.admin-table td code,
+.admin-table td pre {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.admin-table td[data-type="code"] {
+    text-align: center;
+    vertical-align: middle;
+}

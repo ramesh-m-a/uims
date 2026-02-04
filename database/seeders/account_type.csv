@@ -1,0 +1,4 @@
+"id","mas_account_type_name","mas_account_type_status_id","created_at","updated_at","created_by","updated_by"
+1,Savings,1,,,,
+2,Current,0,,,,
+3,Over Draft,0,,,,

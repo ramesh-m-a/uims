@@ -1,0 +1,37 @@
+
+
+.nav-list a .badge .ace-icon, .nav-list a .label .ace-icon {
+vertical-align: middle;
+margin: 0
+}
+
+
+
+.badge:empty, ::safari-only {
+display: inline-block
+}
+
+
+
+.label > .ace-icon, .label > span {
+line-height: 1;
+vertical-align: bottom
+}
+
+
+
+.nav-tabs > li.active > a .ace-icon, .nav-tabs > li.active > a .badge {
+opacity: 1
+}
+
+
+
+.infobox.infobox-dark > .badge.badge-success > .ace-icon {
+color: #C6E9A1
+}
+
+
+
+.infobox.infobox-dark > .badge.badge-important > .ace-icon, .infobox.infobox-dark > .badge.badge-warning > .ace-icon {
+color: #ECB792
+}

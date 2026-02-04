@@ -1,0 +1,24 @@
+<?php
+
+return [
+    'status_field' => 'mas_{{slug}}_status_id',
+
+    'columns' => [
+        'mas_{{slug}}_name' => [
+            'label' => 'Name',
+            'sortable' => true,
+            'filterable' => true,
+            'order' => 1,
+        ],
+
+        'mas_{{slug}}_status_id' => [
+            'label' => 'Status',
+            'type' => 'enum',
+            'options' => [
+                1 => 'Active',
+                2 => 'In Active',
+            ],
+            'order' => 99,
+        ],
+    ],
+];
