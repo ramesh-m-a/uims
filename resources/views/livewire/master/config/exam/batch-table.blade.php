@@ -67,10 +67,10 @@
                     <div class="flex gap-2 items-center border-t pt-4">
                         <select wire:model="newCollegeId" class="form-select w-1/2">
                             <option value="">Select college</option>
-                            @foreach($colleges as $college)
+                            @foreach($allocationColleges as $college)
                                 @if(!array_key_exists($college->id, $allocation))
                                     <option value="{{ $college->id }}">
-                                        {{ $college->mas_college_name }}
+                                        {{ $college->college_display_name }}
                                     </option>
                                 @endif
                             @endforeach
@@ -84,7 +84,7 @@
 
                         <button type="button"
                                 wire:click="addCollege"
-                                class="btn btn-primary">
+                                class="btn btn-white">
                             Add
                         </button>
                     </div>
@@ -129,8 +129,8 @@
                     </div>
 
                     <div class="flex justify-end gap-2 pt-4 border-t">
-                        <button wire:click="$set('showAllocationModal', false)" class="btn btn-secondary">Cancel</button>
-                        <button wire:click="saveAllocation" class="btn btn-primary">Save Changes</button>
+                        <button wire:click="$set('showAllocationModal', false)" class="btn btn-white">Cancel</button>
+                        <button wire:click="saveAllocation" class="btn btn-white">Save Changes</button>
                     </div>
 
                 </div>

@@ -125,7 +125,7 @@ class BatchEngine
         // ---------------------------------
 // 8. Sync TEMP allocation
 // ---------------------------------
-        \App\Services\Exam\SyncTempAllocationService::syncBatch($batch->id);
+        SyncTempAllocationService::syncBatch($batch->id);
 
         return ['total_students' => $totalStudents, 'groups' => $groups, 'days' => $totalDays,];
     }

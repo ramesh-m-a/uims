@@ -198,7 +198,7 @@ class TempAllocationRepository
                     'to_date'=>$newFromDate,
 
                     'original_from_date'=>$r->from_date,
-                    'is_rescheduled'=>1,
+                    'is_rescheduled' => 1,
                     'rescheduled_at'=>now(),
                     'rescheduled_by'=>$userId,
 
