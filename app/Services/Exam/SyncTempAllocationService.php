@@ -41,19 +41,18 @@ class SyncTempAllocationService
                 ->select(
                     't.*',
                     'r.mas_batch_range_group_number as group_number',
-                    'r.mas_batch_range_centre_id as range_centre_id'
+                    'r.mas_batch_range_centre_id as range_centre_id',
+                    'r.mas_batch_range_status_id as range_status'
                 )
                 ->get();
 
             $tempMap = $temps
                 ->filter(fn($t) => $t->group_number !== null)
-                ->keyBy(function ($t) {
-                    return $t->centre_id . '|' . $t->group_number;
-                });
+                ->keyBy(fn($t) => $t->centre_id . '|' . $t->group_number);
 
             /*
             -------------------------------------------------
-            STEP 3 — UPDATE EXISTING LOGICAL MATCHES
+            STEP 3 — SAFE REMAP (ONLY IF RANGE STILL EXISTS)
             -------------------------------------------------
             */
             foreach ($rangeMap as $logicalKey => $range) {
@@ -64,8 +63,21 @@ class SyncTempAllocationService
 
                 $temp = $tempMap[$logicalKey];
 
-                // 🚨 CRITICAL FIX
-                // Only remap if temp was already pointing to THIS logical range lineage
+                /*
+                -------------------------------------------------
+                CRITICAL RULE 1 — RANGE ID IS SACRED
+                If original temp range no longer exists → DO NOT REMAP
+                -------------------------------------------------
+                */
+                if (!in_array($temp->batch_range_id, $rangeIdSet)) {
+                    continue;
+                }
+
+                /*
+                -------------------------------------------------
+                CRITICAL RULE 2 — CENTRE LINEAGE MUST MATCH
+                -------------------------------------------------
+                */
                 if ($temp->range_centre_id != $range->mas_batch_range_centre_id) {
                     continue;
                 }
@@ -81,15 +93,20 @@ class SyncTempAllocationService
                         'batch_range_id' => $range->id,
                         'from_date'      => $range->mas_batch_range_from_date,
                         'to_date'        => $range->mas_batch_range_to_date,
+
+                        // Auto heal reschedule flag
                         'is_rescheduled' => $dateChanged ? 1 : 0,
-                        'status'         => $temp->status, // preserve workflow
+
+                        // Preserve workflow
+                        'status'         => $temp->status,
+
                         'updated_at'     => now(),
                     ]);
             }
 
             /*
             -------------------------------------------------
-            STEP 4 — MARK ORPHAN TEMPS INACTIVE
+            STEP 4 — ORPHAN TEMP → HARD INACTIVE
             -------------------------------------------------
             */
             DB::table('temp_examiner_assigned_details')
@@ -97,12 +114,13 @@ class SyncTempAllocationService
                 ->whereNotIn('batch_range_id', $rangeIdSet)
                 ->update([
                     'status' => 2,
+                    'is_rescheduled' => 1,
                     'updated_at' => now(),
                 ]);
 
             /*
             -------------------------------------------------
-            STEP 5 — INSERT NEW RANGE TEMP ROWS
+            STEP 5 — SAFE TEMPLATE INSERT (CLEAN ONLY)
             -------------------------------------------------
             */
             foreach ($rangeMap as $logicalKey => $range) {
@@ -113,22 +131,23 @@ class SyncTempAllocationService
 
                 if ($exists) continue;
 
+                /*
+                SAFE TEMPLATE PICK
+                */
                 $template = DB::table('temp_examiner_assigned_details as t')
                     ->join('mas_batch_range as r', 'r.id', '=', 't.batch_range_id')
                     ->where('t.batch_id', $batchId)
                     ->where('t.centre_id', $range->mas_batch_range_centre_id)
                     ->where('r.mas_batch_range_group_number', $range->mas_batch_range_group_number)
+
+                    // HARD SAFETY FILTERS
+                    ->where('r.mas_batch_range_status_id', 1)
+                    ->where('t.is_rescheduled', 0)
+                    ->whereIn('t.status', [1, 26])
+
                     ->orderByDesc('t.id')
                     ->select('t.*')
                     ->first();
-
-                if (!$template) {
-                    $template = DB::table('temp_examiner_assigned_details')
-                        ->where('batch_id', $batchId)
-                        ->where('centre_id', $range->mas_batch_range_centre_id)
-                        ->orderByDesc('id')
-                        ->first();
-                }
 
                 if (!$template) continue;
 
@@ -169,7 +188,7 @@ class SyncTempAllocationService
 
             /*
             -------------------------------------------------
-            STEP 6 — 🥇 GOLDEN RULE: INACTIVATE LAST RANGE
+            STEP 6 — GOLDEN RULE (ONLY IF MULTI RANGE ACTIVE)
             -------------------------------------------------
             */
             if ($ranges->count() > 1) {
@@ -183,6 +202,7 @@ class SyncTempAllocationService
                     ->where('batch_range_id', $lastRange->id)
                     ->update([
                         'status' => 2,
+                        'is_rescheduled' => 1,
                         'updated_at' => now(),
                     ]);
             }
