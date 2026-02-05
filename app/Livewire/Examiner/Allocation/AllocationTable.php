@@ -264,7 +264,10 @@ class AllocationTable extends Component
             ->where('year_id', $this->yearId)
             ->where('month_id', $this->monthId)
             ->where('scheme_id', $this->schemeId)
-            ->where('degree_id', $this->degreeId);
+            ->where('degree_id', $this->degreeId)
+
+            // 🥇 FINAL RULE — DO NOT SHOW INACTIVE
+            ->where('status', '!=', 2);
     }
 
     /**
