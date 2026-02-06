@@ -17,6 +17,7 @@ use App\Livewire\Examiner\Allocation\AllocationTable;
 use App\Livewire\Examiner\Allocation\ExaminerAllocationCollege;
 use App\Livewire\Examiner\Appoint\AppointExaminer;
 
+use App\Livewire\Examiner\Requests\RequestQueueTable;
 use App\Livewire\Profile\IdCard;
 use App\Livewire\Profile\IdCardControllerdelete;
 use App\Livewire\Profile\SubjectDetailsTable;
@@ -595,6 +596,10 @@ Route::prefix('examiner')->group(function () {
     Route::post('/examiner/requests/{id}/reject',
         [ExaminerRequestController::class, 'reject']
     )->name('examiner.requests.reject');
+
+    Route::get('/examiner/requests', RequestQueueTable::class)
+        ->name('examiner.requests');
+
 
 });
 
