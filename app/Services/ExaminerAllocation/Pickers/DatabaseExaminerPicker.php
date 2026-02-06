@@ -74,61 +74,6 @@ class DatabaseExaminerPicker implements ExaminerPicker
         return $row ? (array)$row : null;
     }
 
-    protected function pickFreshissue(
-        string $slotType,
-        int $departmentId,
-        int $centreId,
-        array $attachedCentreIds,
-        array $exclude
-    ): ?array {
-
-        $q = DB::table('examiner_details as ed')
-            ->join('basic_details as bd', 'ed.examiner_details_basic_details_id', '=', 'bd.id')
-            ->join('users as usr', 'bd.basic_details_user_id', '=', 'usr.id')
-
-            // 👇 canonical-aware joins for users
-            ->leftJoin('mas_college as uc', 'uc.id', '=', 'usr.user_college_id')
-            ->leftJoin('mas_college as ucc', 'ucc.id', '=', 'uc.mas_college_canonical_college_id')
-
-            ->leftJoin('mas_status as ms', 'ed.examiner_details_status_id', '=', 'ms.id')
-            ->select(
-                'ed.id',
-                'usr.name as name',
-                'usr.mobile as mobile',
-                'ms.mas_status_name as status',
-                'ms.mas_status_label_colour as colour'
-            )
-            ->whereNotIn('ed.id', $exclude);
-
-        // Department rule stays unchanged
-        if (str_contains($slotType, 'Internal')) {
-            $q->where('bd.basic_details_department_id', $departmentId);
-        }
-
-        // 👇 All college comparisons now use canonical-aware expression
-        $effectiveCollege = DB::raw('COALESCE(ucc.id, uc.id)');
-
-        match ($slotType) {
-            'Internal-C' =>
-            $q->where($effectiveCollege, '=', $centreId)
-                ->where('ed.examiner_details_type', 1),
-
-            'Internal-A' =>
-            $q->whereIn($effectiveCollege, $attachedCentreIds ?: [$centreId])
-                ->where('ed.examiner_details_type', 1),
-
-            'External', 'External-O' =>
-            $q->where('ed.examiner_details_type', 2)
-                ->where($effectiveCollege, '!=', $centreId),
-
-            default => null
-        };
-
-        $row = $q->orderBy('ed.examiner_details_rank', 'asc')->first();
-
-        return $row ? (array) $row : null;
-    }
-
     protected function pickFresh(
         string $slotType,
         int $departmentId,

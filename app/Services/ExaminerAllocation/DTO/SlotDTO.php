@@ -15,7 +15,7 @@ final class SlotDTO
         ?string $status = null,
         ?string $colour = null,
     ) {
-        $this->status = $status ?? 'Assignedadfafafafs';
+        $this->status = $status ?? 'Assigned';
         $this->colour = $colour ?? '#6c757d';
     }
 

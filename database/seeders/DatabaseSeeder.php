@@ -125,6 +125,7 @@ class DatabaseSeeder extends Seeder
             AddressDetailsSeeder::class,
             QualificationDetailsSeeder::class,
             WorkDetailsSeeder::class,
+            BankDetailsSeeder::class,
             DocumentDetailsSeeder::class,
 
             /*
@@ -142,11 +143,11 @@ class DatabaseSeeder extends Seeder
         // 👇 Post-seed maintenance jobs
         $this->command->info('Running post-seed sync jobs...');
 
-        Artisan::call('cleanup:bank-ifsc');
-        Artisan::call('resequence:banks');
-        Artisan::call('sync:masters');
+      /*  Artisan::call('profile:cleanup-ifsc');
+        Artisan::call('db:resequence-banks');
+       // Artisan::call('sync:masters');
         Artisan::call('sync:departments');
-        Artisan::call('sync:user-colleges');
+        Artisan::call('sync:users-colleges');*/
 
         $this->command->info('Post-seed jobs completed.');
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\ForcePasswordController;
 use App\Http\Controllers\ExaminerAllocationTestController;
 
 use App\Http\Controllers\ExaminerController;
+use App\Http\Controllers\ExaminerRequestController;
 use App\Http\Controllers\IdVerifyController;
 use App\Http\Controllers\Master\StudentPerBatch\StudentPerBatchController;
 use App\Http\Controllers\ProfilePreviewController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Rguhs\ProfileApprovalController as RguhsProfileApproval
 use App\Http\Controllers\SubjectDetailsController;
 use App\Http\Controllers\VerifyIdController;
 use App\Livewire\Examiner\Allocation\AllocationTable;
+use App\Livewire\Examiner\Allocation\ExaminerAllocationCollege;
 use App\Livewire\Examiner\Appoint\AppointExaminer;
 
 use App\Livewire\Profile\IdCard;
@@ -525,13 +527,16 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::get('/allocation-test', [ExaminerAllocationTestController::class, 'test']);
 
-    Route::get('/allocation-finalize-test', [\App\Http\Controllers\ExaminerAllocationTestController::class, 'finalizeTest']);
+    Route::get('/allocation-finalize-test', [ExaminerAllocationTestController::class, 'finalizeTest']);
 
     Route::get('/examiner/allocation', AllocationTable::class)
         ->name('examiner.allocation');
 
     Route::get('/examiner/appoint', AppointExaminer::class)
         ->name('examiner.appoint');
+
+    Route::get('/examiner/college/allocation', ExaminerAllocationCollege::class)
+        ->name('examiner.college.allocation');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -542,16 +547,16 @@ Route::middleware(['auth'])->group(function () {
         ->name('profile.partials-card');
 
     Route::get('/verify', VerifyIdController::class)->name('verify.id');
-
+/*
     Route::get('/verify/{token}', [IdVerifyController::class, 'verify'])
-        ->name('id.verify');
+        ->name('id.verify');*/
 });
 
 
 
 
 Route::get('/test-token', function () {
-    $user = auth()->user() ?? \App\Models\User::first();
+    $user = auth()->user() ?? \App\Models\Admin\User::first();
 
     $payload = [
         'sub' => $user->id,
@@ -572,6 +577,26 @@ Route::get('/exports/{export}/download', function (Export $export) {
     return Storage::disk($export->disk)
         ->download($export->filename);
 })->name('exports.download');
+
+
+
+
+
+
+Route::prefix('examiner')->group(function () {
+
+    Route::get('/requests', [ExaminerRequestController::class, 'index'])
+        ->name('examiner.requests');
+
+    Route::post('/examiner/requests/{id}/approve',
+        [ExaminerRequestController::class, 'approve']
+    )->name('examiner.requests.approve');
+
+    Route::post('/examiner/requests/{id}/reject',
+        [ExaminerRequestController::class, 'reject']
+    )->name('examiner.requests.reject');
+
+});
 
 /*
 

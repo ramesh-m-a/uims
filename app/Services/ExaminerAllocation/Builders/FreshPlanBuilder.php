@@ -88,7 +88,7 @@ class FreshPlanBuilder
 
                         examinerType: $slotType,
                         examinerTypeId: str_contains($slotType, 'Internal') ? 1 : 2,
-                        statusId: 26
+                        statusId: 16
                     )
                 );
 

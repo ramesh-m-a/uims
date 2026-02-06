@@ -9,15 +9,28 @@ use App\Services\ExaminerAllocation\DTO\AllocationRowDTO;
 
 class TempAllocationRepository
 {
+
     public function fetchForContext(AllocationContext $context): Collection
     {
-        return DB::table('temp_examiner_assigned_details')
+        $query = DB::table('temp_examiner_assigned_details')
             ->where('user_id', $context->userId)
             ->where('year_id', $context->yearId)
             ->where('month_id', $context->monthId)
             ->where('scheme_id', $context->schemeId)
             ->where('degree_id', $context->degreeId)
-            ->whereIn('status', [49, 26])
+            // 🥇 FINAL RULE — DO NOT SHOW INACTIVE
+            ->where('status', '!=', 2);
+        // ->whereIn('status', [49, 26, 40]);
+
+        /**
+         * ⭐ COLLEGE DATA SCOPE FIX
+         * College should see ONLY their centre allocations
+         */
+        if (auth()->check() && auth()->user()->user_role_id === 3) {
+            $query->where('centre_id', auth()->user()->user_college_id);
+        }
+
+        return $query
             ->orderBy('batch_id')
             ->orderBy('batch_range_id')
             ->orderBy('id')
@@ -40,6 +53,12 @@ class TempAllocationRepository
      */
     public function store(AllocationContext $context, iterable $rows): void
     {
+
+        // 🚨 SAFETY GUARD — COLLEGE MUST NEVER WRITE TEMP
+        if (auth()->check() && auth()->user()->user_role_id === 3) {
+            throw new \Exception('SECURITY: College cannot modify temp allocation');
+        }
+
         DB::beginTransaction();
 
         try {
@@ -216,6 +235,44 @@ class TempAllocationRepository
                 ]);
 
         });
+    }
+
+    public function fetchForCollegeContext(AllocationContext $context): Collection
+    {
+        $collegeId = auth()->user()->user_college_id;
+
+        return DB::table('temp_examiner_assigned_details as t')
+
+            ->where('t.year_id', $context->yearId)
+            ->where('t.month_id', $context->monthId)
+            ->where('t.scheme_id', $context->schemeId)
+            ->where('t.degree_id', $context->degreeId)
+            ->where('t.centre_id', $collegeId)
+
+            ->where('t.status', '!=', 2)
+
+            ->select(
+                't.*',
+
+                DB::raw("
+                CASE WHEN EXISTS (
+                    SELECT 1
+                    FROM college_examiner_request_details cer
+                    WHERE cer.college_examiner_request_details_batch_id = t.batch_id
+                    AND cer.college_examiner_request_details_college_id = {$collegeId}
+                    AND cer.college_examiner_request_details_year_id = t.year_id
+                    AND cer.college_examiner_request_details_month_id = t.month_id
+                    AND cer.college_examiner_request_details_revised_scheme_id = t.scheme_id
+                    AND cer.college_examiner_request_details_status_id = 26
+                )
+                THEN 1 ELSE 0 END AS has_request
+            ")
+            )
+
+            ->orderBy('t.batch_id')
+            ->orderBy('t.batch_range_id')
+            ->orderBy('t.id')
+            ->get();
     }
 
 }

@@ -36,8 +36,8 @@ class TempPlanBuilder
 
             $statusLabel = $r->status_label
                 ?? match ((int)$r->status) {
-                    27 => 'Assignment Pending Temp',
-                    26 => 'Assigned Temp',
+                    15 => 'Assignment Pending Temp',
+                    16 => 'Assigned Temp',
                     default => (string)$r->status,
                 };
 

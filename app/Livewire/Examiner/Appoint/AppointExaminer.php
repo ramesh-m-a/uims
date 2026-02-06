@@ -33,7 +33,13 @@ class AppointExaminer extends Component
                     'allocation.degreeId' => $degreeId,
                 ]);
 
-                $this->redirect(route('examiner.allocation'));
+                if (auth()->user()->user_role_id === 3) {
+                    // College → Go to college allocation screen
+                    $this->redirect(route('examiner.college.allocation'));
+                } else {
+                    // Admin → Go to admin allocation screen
+                    $this->redirect(route('examiner.allocation'));
+                }
 
                 return;
             } catch (\Throwable $e) {

@@ -4,14 +4,39 @@ namespace App\Livewire;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 
 class MenuSidebar extends Component
 {
     public array $menus = [];
 
+    private const STATUS_PENDING = 26;
+    private const STATUS_APPROVED = 27;
+    private const STATUS_REJECTED = 28;
+
     public function mount()
     {
         $user = auth()->user();
+
+        // -------------------------------------------------
+        // FETCH EXAMINER REQUEST COUNTS (ONCE)
+        // -------------------------------------------------
+        $examinerCounts = DB::table('college_examiner_request_details')
+            ->selectRaw("
+        SUM(CASE WHEN college_examiner_request_details_status_id = ? THEN 1 ELSE 0 END) as pending_count,
+        SUM(CASE WHEN college_examiner_request_details_status_id = ? THEN 1 ELSE 0 END) as approved_count,
+        SUM(CASE WHEN college_examiner_request_details_status_id = ? THEN 1 ELSE 0 END) as rejected_count
+    ", [
+                self::STATUS_PENDING,
+                self::STATUS_APPROVED,
+                self::STATUS_REJECTED
+            ])
+            ->first();
+
+        $pendingCount  = $examinerCounts->pending_count ?? 0;
+        $approvedCount = $examinerCounts->approved_count ?? 0;
+        $rejectedCount = $examinerCounts->rejected_count ?? 0;
+
         /**
          * FINAL RULES (MATCH DB TRUTH)
          * - user_role_id === NULL  => ADMIN
@@ -19,6 +44,7 @@ class MenuSidebar extends Component
          */
         $isAdmin   = is_null($user->user_role_id);
         $isTeacher = $user->user_role_id === 5;
+        $isCollege = $user->user_role_id === 3;
 
         $urlFor = fn (?string $route)
         => $route && Route::has($route) ? route($route) : '#';
@@ -411,10 +437,10 @@ class MenuSidebar extends Component
                                         'active' => '',
                                     ],
                                     [
-                                        'title'  => 'College',
+                                        'title'  => "College ({$pendingCount})",
                                         'icon'   => 'user-check',
-                                        'href'   => '',
-                                        'active' => '',
+                                        'href'   => $urlFor('examiner.requests') . '?status=' . self::STATUS_PENDING,
+                                        'active' => request()->get('status') == self::STATUS_PENDING,
                                     ],
                                 ],
                             ],
@@ -436,10 +462,10 @@ class MenuSidebar extends Component
                                         'active' => '',
                                     ],
                                     [
-                                        'title'  => 'College',
+                                        'title'  => "College ({$approvedCount})",
                                         'icon'   => 'user-check',
-                                        'href'   => '',
-                                        'active' => '',
+                                        'href'   => $urlFor('examiner.requests') . '?status=' . self::STATUS_APPROVED,
+                                        'active' => request()->get('status') == self::STATUS_APPROVED,
                                     ],
                                 ],
                             ],
@@ -461,10 +487,10 @@ class MenuSidebar extends Component
                                         'active' => '',
                                     ],
                                     [
-                                        'title'  => 'College',
+                                        'title'  => "College ({$rejectedCount})",
                                         'icon'   => 'user-xmark',
-                                        'href'   => '',
-                                        'active' => '',
+                                        'href'   => $urlFor('examiner.requests') . '?status=' . self::STATUS_REJECTED,
+                                        'active' => request()->get('status') == self::STATUS_REJECTED,
                                     ],
                                 ],
                             ],
@@ -598,6 +624,48 @@ class MenuSidebar extends Component
         ];
 
         /* ==================================================
+ | 🏫 COLLEGE MENU
+ ================================================== */
+        $collegeMenus = [
+
+            [
+                'title' => 'Home',
+                'type'  => 'group',
+                'items' => [
+                    [
+                        'title'  => 'Dashboard',
+                        'icon'   => 'dashboard',
+                        'href'   => $urlFor('dashboard'),
+                        'active' => $isActive('dashboard'),
+                    ],
+                ],
+            ],
+
+            [
+                'title' => 'Examiner',
+                'type'  => 'group',
+                'items' => [
+
+                    [
+                        'title'  => 'Appoint Examiner',
+                        'icon'   => 'user-plus',
+                        'href'  => $urlFor('examiner.appoint'),
+                        'active'=> $isActive('examiner.appoint'),
+                    ],
+                    [
+                        'title'  => 'My Change Requests',
+                        'icon'   => 'envelope',
+                        'href'   => '#', // future
+                        'active' => '',
+                    ],
+
+                ],
+            ],
+
+        ];
+
+
+        /* ==================================================
          | 🎯 FINAL ASSIGNMENT (NO TRIMMING)
          ================================================== */
         if ($isAdmin) {
@@ -607,6 +675,16 @@ class MenuSidebar extends Component
 
         if ($isTeacher) {
             $this->menus = $teacherMenus;
+            return;
+        }
+
+        /**
+         * ⭐ COLLEGE USERS
+         * For now reuse admin menu (safe + fast)
+         * Later we can restrict if needed
+         */
+        if ($isCollege) {
+            $this->menus = $collegeMenus;
             return;
         }
 

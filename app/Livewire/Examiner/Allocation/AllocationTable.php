@@ -56,6 +56,8 @@ class AllocationTable extends Component
     public bool $isAddingAdditional = false;
     public bool $isContactRGUHS = false;
 
+    public array $requestStatusMap = [];
+
     protected $queryString = [
         'yearId'   => ['except' => ''],
         'monthId'  => ['except' => ''],
@@ -64,6 +66,63 @@ class AllocationTable extends Component
         'streamId' => ['except' => ''],
     ];
 
+    /* =====================================================
+ STATUS MAP BUILDER (ADMIN + COLLEGE COMMON)
+ ===================================================== */
+    private function buildRequestStatusMap($rows): void
+    {
+        if ($rows->isEmpty()) {
+            $this->requestStatusMap = [];
+            return;
+        }
+
+        $collegeIds = $rows->pluck('centre_id')->unique()->values();
+
+        $requests = DB::table('college_examiner_request_details as cer')
+            ->join('request_status_master as rsm',
+                'rsm.id',
+                '=',
+                'cer.college_examiner_request_details_status_id'
+            )
+            ->leftJoin('mas_status as ms',
+                'ms.id',
+                '=',
+                'rsm.status_id'
+            )
+            ->whereIn(
+                'cer.college_examiner_request_details_college_id',
+                $collegeIds
+            )
+            ->select([
+                'cer.college_examiner_request_details_batch_id as batch_id',
+                'cer.college_examiner_request_details_examiner_id as examiner_id',
+
+                'rsm.label as label',
+                'rsm.is_pending',
+
+                DB::raw("
+            COALESCE(ms.mas_status_label_colour, 'bg-gray-400')
+            as colour
+        "),
+            ])
+            ->get();
+
+        $this->requestStatusMap = $requests
+            ->groupBy('batch_id')
+            ->map(function ($batchItems) {
+                return $batchItems
+                    ->keyBy('examiner_id')
+                    ->map(function ($row) {
+                        return [
+                            'label' => $row->label,
+                            'is_pending' => (bool) $row->is_pending,
+                            'colour' => $row->colour ?: 'bg-orange-300',
+                        ];
+                    })
+                    ->toArray();
+            })
+            ->toArray();
+    }
     public function mountrefreshissue(
         \App\Services\ExaminerAllocation\AllocationEngine $engine,
         \App\Repositories\TempAllocationRepository $tempRepo
@@ -475,10 +534,15 @@ class AllocationTable extends Component
 
     public function render()
     {
+        $rows = $this->rows;
+
+        $this->buildRequestStatusMap($rows);
+
         return view('livewire.examiner.allocation.allocation-table', [
-            'rows'         => $this->rows,
-            'allRows'      => $this->allRows,
-            'pickerResults'=> $this->pickerResults,
+            'rows' => $rows,
+            'allRows' => $this->allRows,
+            'pickerResults' => $this->pickerResults,
+            'requestStatusMap' => $this->requestStatusMap,
         ]);
     }
 

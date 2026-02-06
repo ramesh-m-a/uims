@@ -16,6 +16,12 @@ class TempAllocationPersister
         int $degreeId,
         Collection $rows
     ): void {
+
+        // 🚨 SAFETY GUARD — COLLEGE MUST NEVER WRITE TEMP
+        if (auth()->check() && auth()->user()->user_role_id === 3) {
+            throw new \Exception('SECURITY: College cannot modify temp allocation');
+        }
+
         DB::transaction(function () use ($userId, $yearId, $monthId, $schemeId, $degreeId, $rows) {
 
             DB::table('temp_examiner_assigned_details')
@@ -33,8 +39,8 @@ class TempAllocationPersister
                 $eid = (int)$r->examinerId;
 
                 [$status, $label] = $eid < 0
-                    ? [27, 'Assignment Pending ']
-                    : [26, 'Assigned'];
+                    ? [15, 'ASSIGNMENT PENDING']
+                    : [16, 'ASSIGNED'];
 
                 $buffer[] = [
                     'user_id'         => $userId,
