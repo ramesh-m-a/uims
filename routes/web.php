@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\TeacherApprovalController;
 use App\Http\Controllers\Audit\ProfileAuditController;
 use App\Http\Controllers\Auth\ForcePasswordController;
+use App\Http\Controllers\Examiner\AppointmentOrderVerifyController;
 use App\Http\Controllers\ExaminerAllocationTestController;
 
 use App\Http\Controllers\ExaminerController;
@@ -17,6 +18,7 @@ use App\Livewire\Examiner\Allocation\AllocationTable;
 use App\Livewire\Examiner\Allocation\ExaminerAllocationCollege;
 use App\Livewire\Examiner\Appoint\AppointExaminer;
 
+use App\Livewire\Examiner\AppointmentOrder\AppointmentOrderView;
 use App\Livewire\Examiner\Requests\RequestQueueTable;
 use App\Livewire\Profile\IdCard;
 use App\Livewire\Profile\IdCardControllerdelete;
@@ -32,6 +34,7 @@ use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 
 use Firebase\JWT\JWT;
+use Spatie\Browsershot\Browsershot;
 
 /* =========================
  | SUPPORT / LIVEWIRE
@@ -353,6 +356,12 @@ Route::middleware(['auth', 'permission:master.common.view'])
 
         Route::view('/status', 'master.common.status.index')
             ->name('status.index');
+
+        Route::view('/salary_mode', 'master.common.salary-mode.index')
+            ->name('salary-mode.index');
+
+        Route::view('/account_type', 'master.common.account-type.index')
+            ->name('account-type.index');
     });
 
 /*
@@ -538,6 +547,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/examiner/college/allocation', ExaminerAllocationCollege::class)
         ->name('examiner.college.allocation');
+
+    Route::get('/examiner/appointment-order/view', AppointmentOrderView::class)
+        ->name('examiner.appointment-order.view');
+
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -602,6 +615,39 @@ Route::prefix('examiner')->group(function () {
 
 
 });
+
+
+Route::get('/test-pdf', function () {
+
+    $html = "
+        <h1>UIMS PDF Test</h1>
+        <p>If you can read this → Chromium + Browsershot working</p>
+    ";
+
+    $path = storage_path('app/test.pdf');
+
+    Browsershot::html($html)
+        ->format('A4')
+        ->timeout(120)
+        ->save($path);
+
+    return "PDF Generated at storage/app/test.pdf";
+});
+
+Route::get('/verify-order/{orderNumber}',
+    [AppointmentOrderVerifyController::class, 'verify']
+);
+
+
+/*Route::prefix('examiner/appointment-order')->group(function () {
+
+    Route::get('/view', [AppointmentOrderViewController::class, 'index'])
+        ->name('examiner.appointment-order.view');
+
+    Route::get('/list', [AppointmentOrderViewController::class, 'list'])
+        ->name('examiner.appointment-order.list');
+
+});*/
 
 /*
 

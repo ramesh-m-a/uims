@@ -209,7 +209,7 @@ class UserSeeder extends Seeder
         echo "\nDONE ✅ Imported {$count} users\n";
     }*/
 
-    public function run(): void
+    public function runhardcode(): void
     {
         $path = base_path('database/seeders/users.csv');
 
@@ -279,6 +279,160 @@ class UserSeeder extends Seeder
 
         echo "\nDONE ✅ Imported {$count} users\n";
     }
+
+    public function run(): void
+    {
+        $path = base_path('database/seeders/users.csv');
+
+        $passwordHash = Hash::make('Password@123');
+
+        if (!file_exists($path)) {
+            echo "❌ CSV not found\n";
+            return;
+        }
+
+        $handle = fopen($path, 'r');
+        if (!$handle) {
+            echo "❌ Cannot open CSV\n";
+            return;
+        }
+
+        echo "🚀 Importing users from CSV...\n";
+
+        $header = fgetcsv($handle);
+        if (!$header) {
+            echo "❌ Empty CSV\n";
+            return;
+        }
+
+        $header = array_map(fn($h) => strtolower(trim($h)), $header);
+
+        DB::disableQueryLog();
+        DB::beginTransaction();
+
+        $processed = 0;
+        $upserted = 0;
+        $skipped = 0;
+        $errors = 0;
+
+        $errorLogPath = base_path('database/seeders/users_import_errors.csv');
+        $errorHandle = fopen($errorLogPath, 'w');
+        fputcsv($errorHandle, ['row_number', 'reason', 'raw_data']);
+
+        try {
+
+            while (($row = fgetcsv($handle)) !== false) {
+
+                $processed++;
+
+                if (count($row) !== count($header)) {
+                    $skipped++;
+                    fputcsv($errorHandle, [$processed, 'Column mismatch', json_encode($row)]);
+                    continue;
+                }
+
+                $data = array_combine($header, $row);
+
+                $id = (int)($data['id'] ?? 0);
+                if (!$id) {
+                    $skipped++;
+                    fputcsv($errorHandle, [$processed, 'Missing ID', json_encode($row)]);
+                    continue;
+                }
+
+                try {
+
+                    DB::statement("
+                    INSERT INTO users
+                    (
+                        id,
+                        name,
+                        email,
+                        mobile,
+                        photo_path,
+                        user_stream_id,
+                        user_college_id,
+                        user_designation_id,
+                        password,
+                        force_password_change,
+                        user_status_id,
+                        user_role_id,
+                        created_at,
+                        updated_at
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+
+                    ON DUPLICATE KEY UPDATE
+                        name = VALUES(name),
+                        email = VALUES(email),
+                        mobile = VALUES(mobile),
+                        photo_path = VALUES(photo_path),
+                        user_stream_id = VALUES(user_stream_id),
+                        user_college_id = VALUES(user_college_id),
+                        user_designation_id = VALUES(user_designation_id),
+                        password = VALUES(password),
+                        force_password_change = VALUES(force_password_change),
+                        user_status_id = VALUES(user_status_id),
+                        user_role_id = VALUES(user_role_id),
+                        updated_at = VALUES(updated_at)
+                ", [
+                        $id,
+                        trim($data['name'] ?? ''),
+                        trim($data['email'] ?? '') ?: null,
+                        trim($data['mobile'] ?? '') ?: null,
+                        trim($data['photo_path'] ?? '') ?: null,
+                        ($data['user_stream_id'] ?? '') !== '' ? (int)$data['user_stream_id'] : null,
+                        ($data['user_college_id'] ?? '') !== '' ? (int)$data['user_college_id'] : null,
+                        ($data['user_designation_id'] ?? '') !== '' ? (int)$data['user_designation_id'] : null,
+                        $passwordHash,
+                        1,
+                        ($data['user_status_id'] ?? '') !== '' ? (int)$data['user_status_id'] : null,
+                        ($data['user_role_id'] ?? '') !== '' ? (int)$data['user_role_id'] : null,
+                        trim($data['created_at'] ?? '') ?: now(),
+                        trim($data['updated_at'] ?? '') ?: now(),
+                    ]);
+
+                    $upserted++;
+
+                } catch (\Throwable $e) {
+
+                    $errors++;
+                    fputcsv($errorHandle, [
+                        $processed,
+                        $e->getMessage(),
+                        json_encode($row)
+                    ]);
+                }
+
+                if ($processed % 5000 === 0) {
+                    echo "Processed: {$processed} | Upserted: {$upserted} | Skipped: {$skipped} | Errors: {$errors}\n";
+                }
+            }
+
+            DB::commit();
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+            fclose($handle);
+            fclose($errorHandle);
+
+            echo "❌ IMPORT FAILED: " . $e->getMessage() . "\n";
+            return;
+        }
+
+        fclose($handle);
+        fclose($errorHandle);
+
+        echo "\n✅ IMPORT COMPLETE\n";
+        echo "Processed : {$processed}\n";
+        echo "Upserted  : {$upserted}\n";
+        echo "Skipped   : {$skipped}\n";
+        echo "Errors    : {$errors}\n";
+        echo "Error Log : {$errorLogPath}\n";
+    }
+
+
 }
 
 

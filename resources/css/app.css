@@ -4,6 +4,15 @@
 @import '../../vendor/livewire/flux/dist/flux.css';
 @import './custom.css';
 @import './admin-table.css';
+@import "./uims-tokens.css";
+@import "./uims-base.css";
+@import "./uims-buttons.css";
+@import "./uims-inputs.css";
+@import "./uims-cards.css";
+@import "./uims-table.css";
+@import "./uims-workflow.css";
+@import "./uims-tokens.css";
+@import "./uims-icons.css";
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';

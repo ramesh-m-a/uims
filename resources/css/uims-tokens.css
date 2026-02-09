@@ -1,0 +1,100 @@
+:root {
+
+    /* ================= BRAND ================= */
+
+    --uims-amber-base:   #FFB300;
+    --uims-amber-hover:  #E59729;
+    --uims-amber-active: #CC7A00;
+    --uims-amber-soft:   #FFF8E1;
+
+    /* ================= SURFACE ================= */
+
+    --uims-bg-page: #F9FAFB;
+    --uims-bg-card: #FFFFFF;
+    --uims-bg-muted: #F3F4F6;
+
+    /* ================= TEXT ================= */
+
+    --uims-text-main: #111827;
+    --uims-text-secondary: #4B5563;
+    --uims-text-muted: #9CA3AF;
+    --uims-text-on-brand: #FFFFFF;
+
+    /* ================= BORDER ================= */
+
+    --uims-border-light: #E5E7EB;
+    --uims-border-strong: #D1D5DB;
+
+    /* ================= STATUS ================= */
+
+    --uims-success: #059669;
+    --uims-danger: #DC2626;
+    --uims-warning: #D97706;
+    --uims-info: #2563EB;
+
+    /* ================= RADIUS ================= */
+
+    --uims-radius-sm: 6px;
+    --uims-radius-md: 10px;
+    --uims-radius-lg: 14px;
+
+    /* ================= SHADOW ================= */
+
+    --uims-shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --uims-shadow-md: 0 4px 10px rgba(0,0,0,0.08);
+
+    /* =========================
+       UIMS BRAND — AMBER SYSTEM
+    ========================= */
+
+    --uims-color-primary: #F59E0B;
+    --uims-color-primary-hover: #D97706;
+    --uims-color-primary-soft: #FEF3C7;
+
+    /* =========================
+       TEXT
+    ========================= */
+
+    --uims-text-primary: #111827;
+
+    /* =========================
+       SHADOW
+    ========================= */
+
+    --uims-shadow-soft: 0 2px 8px rgba(0,0,0,0.08);
+
+    /* =========================
+       ICON SIZES
+    ========================= */
+
+    --uims-icon-xs: 14px;
+    --uims-icon-sm: 18px;
+    --uims-icon-md: 22px;
+    --uims-icon-lg: 28px;
+
+    /* =============================
+   UIMS AMBER CORE SCALE
+============================= */
+
+    --uims-amber-50:  #FFF7ED;
+    --uims-amber-100: #FFEDD5;
+    --uims-amber-200: #FED7AA;
+    --uims-amber-300: #FDBA74;
+    --uims-amber-400: #FB923C;
+    --uims-amber-500: #F59E0B;
+    --uims-amber-600: #D97706;
+    --uims-amber-700: #B45309;
+
+    /* =============================
+       SOFT ERP ACTION TOKENS
+    ============================= */
+
+    --uims-icon-fill-soft: rgba(217, 119, 6, 0.12);
+    --uims-icon-fill-hover: rgba(217, 119, 6, 0.18);
+
+    --uims-icon-stroke-soft: var(--uims-amber-600);
+    --uims-icon-stroke-hover: var(--uims-amber-700);
+
+    /* Table Safe */
+    --uims-icon-fill-table: rgba(217, 119, 6, 0.10);
+}

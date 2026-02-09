@@ -18,6 +18,7 @@
         "livewire/flux": "^2.9.0",
         "livewire/volt": "^1.7.0",
         "maatwebsite/excel": "^3.1",
+        "spatie/browsershot": "^5.2",
         "wireui/breadcrumbs": "^3.3"
     },
     "require-dev": {

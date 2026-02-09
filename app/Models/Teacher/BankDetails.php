@@ -18,7 +18,7 @@ class BankDetails extends Model
         'bank_details_account_name',
         'bank_details_bank_id',
         'bank_details_branch_id',
-        'bank_details_ifscode',
+        'bank_details_ifs_code',
      //   'bank_details_basic_pay',
       //  'bank_details_gross_pay',
         'bank_details_salary_mode_id',

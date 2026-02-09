@@ -1,0 +1,19 @@
+.uims-btn {
+    @apply px-4 py-2 text-sm font-medium transition-all duration-150;
+    border-radius: var(--uims-radius-md);
+}
+
+/* AMBER PRIMARY */
+
+.uims-btn-primary {
+    background: var(--uims-amber-base);
+    color: var(--uims-text-on-brand);
+}
+
+.uims-btn-primary:hover {
+    background: var(--uims-amber-hover);
+}
+
+.uims-btn-primary:active {
+    background: var(--uims-amber-active);
+}

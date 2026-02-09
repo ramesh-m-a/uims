@@ -9,7 +9,7 @@ class BankDetailsSeeder extends Seeder
 {
     public function run(): void
     {
-        $path = storage_path('database/seeders/bank_details.csv');
+        $path = base_path('database/seeders/bank_details.csv');
         $handle = fopen($path, 'r');
         $header = fgetcsv($handle);
 

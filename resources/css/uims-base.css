@@ -1,0 +1,5 @@
+body {
+    background: var(--uims-bg-page);
+    color: var(--uims-text-main);
+    font-feature-settings: "cv02","cv03","cv04";
+}

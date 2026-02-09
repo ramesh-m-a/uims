@@ -22,8 +22,10 @@ class TempPlanBuilder
 
     public function build(AllocationContext $context): AllocationResult
     {
-     //   dd('TempPlanBuilder - build');
+
         $rows = $this->tempRepo->fetchForContext($context);
+
+        dd('TempPlanBuilder - build', $rows);
 
         if ($rows->isEmpty()) {
             return AllocationResult::empty();

@@ -1,0 +1,23 @@
+.uims-status-badge {
+    @apply px-2 py-1 text-xs font-medium rounded;
+}
+
+.uims-status-approved {
+    background: #ECFDF5;
+    color: var(--uims-success);
+}
+
+.uims-status-rejected {
+    background: #FEF2F2;
+    color: var(--uims-danger);
+}
+
+.uims-status-submitted {
+    background: #EFF6FF;
+    color: var(--uims-info);
+}
+
+.uims-status-draft {
+    background: #F3F4F6;
+    color: var(--uims-text-muted);
+}

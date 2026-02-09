@@ -237,7 +237,7 @@ class TempAllocationRepository
         });
     }
 
-    public function fetchForCollegeContext(AllocationContext $context): Collection
+    public function fetchForCollegeContextworking(AllocationContext $context): Collection
     {
         $collegeId = auth()->user()->user_college_id;
 
@@ -255,11 +255,72 @@ class TempAllocationRepository
                 't.*',
 
                 DB::raw("
+        CASE WHEN EXISTS (
+            SELECT 1
+            FROM college_examiner_request_details cer
+            WHERE cer.college_examiner_request_details_batch_id = t.batch_id
+            AND (
+                cer.college_examiner_request_details_college_id = t.centre_id
+                OR cer.college_examiner_request_details_college_id IS NULL
+            )
+            AND cer.college_examiner_request_details_year_id = t.year_id
+            AND cer.college_examiner_request_details_month_id = t.month_id
+            AND cer.college_examiner_request_details_revised_scheme_id = t.scheme_id
+            AND cer.college_examiner_request_details_status_id = 26
+        )
+        THEN 1 ELSE 0 END AS has_request
+    "),
+
+                DB::raw("
+        CASE WHEN EXISTS (
+            SELECT 1
+            FROM appointment_orders ao
+            WHERE ao.allocation_id = t.id
+            AND ao.is_latest = 1
+        )
+        THEN 1 ELSE 0 END AS has_appointment_order
+    ")
+            )
+
+            ->orderBy('t.batch_id')
+            ->orderBy('t.batch_range_id')
+            ->orderBy('t.id')
+            ->get();
+    }
+
+    public function fetchForCollegeContext(AllocationContext $context): Collection
+    {
+        $collegeId = auth()->user()->user_college_id;
+
+        // ⭐ Build dynamic SQL condition for EXISTS block
+        $collegeExistsCondition = $collegeId
+            ? "AND cer.college_examiner_request_details_college_id = {$collegeId}"
+            : "";
+
+        return DB::table('temp_examiner_assigned_details as t')
+
+            ->where('t.year_id', $context->yearId)
+            ->where('t.month_id', $context->monthId)
+            ->where('t.scheme_id', $context->schemeId)
+            ->where('t.degree_id', $context->degreeId)
+
+            // ⭐ SAFE COLLEGE FILTER (ADMIN SAFE)
+            ->when(
+                $collegeId,
+                fn($q) => $q->where('t.centre_id', $collegeId)
+            )
+
+            ->where('t.status', '!=', 2)
+
+            ->select(
+                't.*',
+
+                DB::raw("
                 CASE WHEN EXISTS (
                     SELECT 1
                     FROM college_examiner_request_details cer
                     WHERE cer.college_examiner_request_details_batch_id = t.batch_id
-                    AND cer.college_examiner_request_details_college_id = {$collegeId}
+                    {$collegeExistsCondition}
                     AND cer.college_examiner_request_details_year_id = t.year_id
                     AND cer.college_examiner_request_details_month_id = t.month_id
                     AND cer.college_examiner_request_details_revised_scheme_id = t.scheme_id
@@ -274,5 +335,6 @@ class TempAllocationRepository
             ->orderBy('t.id')
             ->get();
     }
+
 
 }

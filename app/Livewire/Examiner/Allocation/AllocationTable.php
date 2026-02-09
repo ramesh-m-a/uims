@@ -58,6 +58,8 @@ class AllocationTable extends Component
 
     public array $requestStatusMap = [];
 
+    public bool $isCollegeUser = false;
+
     protected $queryString = [
         'yearId'   => ['except' => ''],
         'monthId'  => ['except' => ''],
@@ -259,6 +261,10 @@ class AllocationTable extends Component
         if (!$this->yearId || !$this->monthId || !$this->schemeId || !$this->degreeId) {
             abort(403, 'Invalid allocation session');
         }
+
+        $this->isCollegeUser =
+            auth()->check() &&
+            auth()->user()->user_role_id === 3;
 
         $context = new AllocationContext(
             yearId: $this->yearId,
@@ -538,11 +544,14 @@ class AllocationTable extends Component
 
         $this->buildRequestStatusMap($rows);
 
-        return view('livewire.examiner.allocation.allocation-table', [
+        return view('livewire.examiner.shared.allocation-table-allocation-wrapper', [
             'rows' => $rows,
-            'allRows' => $this->allRows,
-            'pickerResults' => $this->pickerResults,
+            'centre' => $this->centre,
             'requestStatusMap' => $this->requestStatusMap,
+            'isAppointmentModule' => false,
+
+            // ⭐ CRITICAL — REQUIRED BY BASE BLADE
+            'actionsView' => 'livewire.examiner.allocation.partials.actions-allocation',
         ]);
     }
 
@@ -886,6 +895,57 @@ class AllocationTable extends Component
             ->delete();
 
         $this->dispatch('toast', message: 'Additional examiner removed');
+
+        $this->dispatch('$refresh');
+    }
+
+    /* =========================
+ | COLLEGE REQUEST DRAWER
+ ========================= */
+
+    public bool $showRequestDrawer = false;
+
+    public function openRequestDrawer($row)
+    {
+        $this->selectedRow = $row;
+        $this->pickerSearch = '';
+        $this->showRequestDrawer = true;
+    }
+
+    public function closeRequestDrawer()
+    {
+        $this->showRequestDrawer = false;
+        $this->selectedRow = [];
+    }
+
+    public function submitRequest(int $examinerId)
+    {
+        if (empty($this->selectedRow)) return;
+
+        // ⭐ CALL EXISTING SERVICE (SAME AS COLLEGE MODULE)
+        app(\App\Services\Exam\College\CollegeExaminerRequestService::class)
+            ->createExaminerChangeRequest([
+
+                'year_id' => $this->yearId,
+                'month_id' => $this->monthId,
+                'scheme_id' => $this->schemeId,
+
+                'batch_id' => $this->selectedRow['batch_id'],
+                'batch_range_id' => $this->selectedRow['batch_range_id'],
+
+                'college_id' => auth()->user()->user_college_id,
+                'stream_id' => auth()->user()->user_stream_id,
+
+                'current_examiner_id' => $this->selectedRow['examiner_id'],
+                'new_examiner_id' => $examinerId,
+
+                'created_by' => auth()->id(),
+                'comments' => 'College Requested Examiner Change',
+            ]);
+
+        $this->showRequestDrawer = false;
+
+        $this->dispatch('toast', message: 'Request sent to RGUHS');
 
         $this->dispatch('$refresh');
     }

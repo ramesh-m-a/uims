@@ -29,6 +29,7 @@ class DesignationSeeder extends Seeder
             'Consultant Specialist',
             'Clinical Instructor / Assistant Lecturer',
             'Librarian',
+            'College Administrator',
         ];
 
         foreach ($designations as $designation) {

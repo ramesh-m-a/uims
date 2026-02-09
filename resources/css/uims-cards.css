@@ -1,0 +1,7 @@
+.uims-card {
+    background: var(--uims-bg-card);
+    border: 1px solid var(--uims-border-light);
+    border-radius: var(--uims-radius-lg);
+    box-shadow: var(--uims-shadow-sm);
+    @apply p-6;
+}

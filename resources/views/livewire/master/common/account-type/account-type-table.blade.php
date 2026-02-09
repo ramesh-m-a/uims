@@ -5,7 +5,7 @@
      ========================= --}}
     <div class="breadcrumb-bar">
         @include('partials.breadcrumb', [
-            'title' => 'Bank',
+            'title' => 'Account Type',
             'mode'  => $breadcrumbMode ?? 'View / Update',
         ])
     </div>
@@ -16,7 +16,7 @@
     <div class="flex justify-between items-center">
 
         <h1 class="font-normal text-black-400">
-            Bank
+            Account Type
         </h1>
 
         @if($canCreate)
@@ -24,7 +24,7 @@
                 wire:click="create"
                 class="dt-button buttons-collection btn btn-white btn-bold">
                 <i class="fa fa-plus-square bigger-110 add-button-padding"></i>
-                Add Bank
+                Add Account Type
             </button>
         @endif
     </div>
@@ -33,7 +33,7 @@
      | LIST TABLE
      ========================= --}}
     @include('livewire.master._crud-table', [
-        'rows'              => $banks,
+        'rows'              => $accountTypes,
         'columns'           => $columns,
         'search'            => $search,
         'searchPlaceholder' => 'Search...',
@@ -47,7 +47,7 @@
      ========================= --}}
     <x-master.modal
         :show="$showModal"
-        :title="$editingId ? 'Edit Bank' : 'Add Bank'"
+        :title="$editingId ? 'Edit Account Type' : 'Add Account Type'"
         onSave="save"
         onCancel="cancelEdit"
     >
@@ -56,13 +56,13 @@
             {{-- Bank NAME --}}
             <x-master.form-row
                 label="Name"
-                name="form.mas_bank_name"
+                name="form.mas_account_type_name"
                 required
             >
                 <input
                     type="text"
                     class="form-control"
-                    wire:model.defer="form.mas_bank_name"
+                    wire:model.defer="form.mas_account_type_name"
                     placeholder="Only letters, commas, and spaces are allowed"
                     oninput="this.value = this.value
                         .toUpperCase()
@@ -74,11 +74,11 @@
             @if($editingId)
                 <x-master.form-row
                     label="Status"
-                    name="form.mas_bank_status_id"
+                    name="form.mas_account_type_status_id"
                 >
                     <select
                         class="form-select"
-                        wire:model.defer="form.mas_bank_status_id"
+                        wire:model.defer="form.mas_account_type_status_id"
                     >
                         <option value="1">Active</option>
                         <option value="2">In Active</option>

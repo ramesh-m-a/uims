@@ -73,6 +73,7 @@
 -------------------------------- */
 .admin-table tbody tr {
     background-color: #ffffff;
+    text-transform: uppercase;
 }
 
 .admin-table tbody tr:hover {
@@ -81,6 +82,7 @@
 
 .admin-table tbody td {
     border-top: 1px solid #dee2e6;
+    text-transform: uppercase;
 }
 
 /* -------------------------------
@@ -263,6 +265,7 @@
 .admin-table th,
 .admin-table td {
     border-right: 1px solid #dee2e6;
+    text-transform: uppercase;
 }
 
 /* =========================================================

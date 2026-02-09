@@ -1,0 +1,11 @@
+.uims-input {
+    @apply w-full px-3 py-2 text-sm outline-none transition-all;
+    border-radius: var(--uims-radius-sm);
+    border: 1px solid var(--uims-border-light);
+    background: white;
+}
+
+.uims-input:focus {
+    border-color: var(--uims-amber-base);
+    box-shadow: 0 0 0 2px rgba(255,179,0,0.25);
+}

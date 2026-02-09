@@ -5,7 +5,7 @@
      ========================= --}}
     <div class="breadcrumb-bar">
         @include('partials.breadcrumb', [
-            'title' => 'Bank',
+            'title' => 'Salary Mode',
             'mode'  => $breadcrumbMode ?? 'View / Update',
         ])
     </div>
@@ -16,7 +16,7 @@
     <div class="flex justify-between items-center">
 
         <h1 class="font-normal text-black-400">
-            Bank
+            Salary Mode
         </h1>
 
         @if($canCreate)
@@ -24,7 +24,7 @@
                 wire:click="create"
                 class="dt-button buttons-collection btn btn-white btn-bold">
                 <i class="fa fa-plus-square bigger-110 add-button-padding"></i>
-                Add Bank
+                Add Salary Mode
             </button>
         @endif
     </div>
@@ -33,7 +33,7 @@
      | LIST TABLE
      ========================= --}}
     @include('livewire.master._crud-table', [
-        'rows'              => $banks,
+        'rows'              => $salaryModes,
         'columns'           => $columns,
         'search'            => $search,
         'searchPlaceholder' => 'Search...',
@@ -47,7 +47,7 @@
      ========================= --}}
     <x-master.modal
         :show="$showModal"
-        :title="$editingId ? 'Edit Bank' : 'Add Bank'"
+        :title="$editingId ? 'Edit Salary Mode' : 'Add Salary Mode'"
         onSave="save"
         onCancel="cancelEdit"
     >

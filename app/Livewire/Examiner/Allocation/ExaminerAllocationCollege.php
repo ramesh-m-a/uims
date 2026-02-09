@@ -176,6 +176,7 @@ class ExaminerAllocationCollege extends Component
             ->get()
             ->keyBy('id');
 
+    //    dd($statusMaster);
         // ⭐ LOAD REQUEST RECORDS
         $requests = DB::table('college_examiner_request_details')
             ->where('college_examiner_request_details_college_id', auth()->user()->user_college_id)
@@ -224,11 +225,13 @@ class ExaminerAllocationCollege extends Component
 
         logger($this->requestStatusMap);
 
-        return view('livewire.examiner.allocation.allocation-table', [
+        return view('livewire.examiner.shared.allocation-table-allocation-wrapper', [
             'rows' => $this->filteredRows(),
+            'centre' => null,
             'isCollegeUser' => true,
             'pickerResults' => $this->pickerResults,
             'requestStatusMap' => $this->requestStatusMap, // ⭐ CRITICAL LINE
+            'isAppointmentModule' => false,
         ]);
     }
 
@@ -260,7 +263,7 @@ class ExaminerAllocationCollege extends Component
             ->values();
     }
 
-    public function requestExaminerChange(int $tempRowId, int $newExaminerId)
+    public function requestExaminerChangeold(int $tempRowId, int $newExaminerId)
     {
         $row = collect($this->rows)->firstWhere('id', $tempRowId);
 
@@ -302,6 +305,56 @@ class ExaminerAllocationCollege extends Component
                 'created_by' => auth()->id(),
                 'comments' => 'College Requested Examiner Change',
             ]);
+
+        $this->dispatch('toast', message: 'Request sent to RGUHS');
+    }
+
+    public function requestExaminerChange(int $tempRowId, int $newExaminerId)
+    {
+        $row = collect($this->rows)->firstWhere('id', $tempRowId);
+
+        if (!$row) return;
+
+        // 🔒 SECURITY
+        if ((int)$row->centre_id !== (int)auth()->user()->user_college_id) {
+            abort(403, 'Invalid centre access');
+        }
+
+        // 🔒 DUPLICATE CHECK
+        $exists = DB::table('college_examiner_request_details')
+            ->where('college_examiner_request_details_batch_range_id', $row->batch_range_id)
+            ->where('college_examiner_request_details_examiner_id', $row->examiner_id)
+            ->where('college_examiner_request_details_college_id', auth()->user()->user_college_id)
+            ->exists();
+
+        if ($exists) {
+            $this->dispatch('toast', message: 'Request already exists');
+            return;
+        }
+
+        // ⭐ CREATE REQUEST
+        app(CollegeExaminerRequestService::class)
+            ->createExaminerChangeRequest([
+
+                'year_id' => $this->yearId,
+                'month_id' => $this->monthId,
+                'scheme_id' => $this->schemeId,
+
+                'batch_id' => $row->batch_id,
+                'batch_range_id' => $row->batch_range_id,
+
+                'college_id' => auth()->user()->user_college_id,
+                'stream_id' => auth()->user()->user_stream_id,
+
+                'current_examiner_id' => $row->examiner_id,
+                'new_examiner_id' => $newExaminerId,
+
+                'created_by' => auth()->id(),
+                'comments' => 'College Requested Examiner Change',
+            ]);
+
+        /** ⭐⭐⭐ CRITICAL FIX — REFRESH UI DATA */
+        $this->loadAllocation();
 
         $this->dispatch('toast', message: 'Request sent to RGUHS');
     }

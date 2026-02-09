@@ -55,6 +55,7 @@ class DatabaseSeeder extends Seeder
             AdminRoleSeeder::class,
             StreamDesignationSeeder::class,
             RevisedSchemeStreamSeeder::class,
+            RequestStatusMasterSeeder::class,
 
           /*  DegreeGroupSeeder::class,
             SpecialisationGroupSeeder::class,

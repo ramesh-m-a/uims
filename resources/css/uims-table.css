@@ -1,0 +1,30 @@
+.uims-table {
+    @apply w-full text-sm;
+}
+
+.uims-table th {
+    @apply text-left text-xs uppercase tracking-wide;
+    color: var(--uims-text-secondary);
+}
+
+.uims-table tbody tr:hover {
+    background: var(--uims-amber-soft);
+}
+
+
+/* =========================
+ UIMS TABLE TEXT POLICY
+ ========================= */
+
+/* Main table text uppercase */
+.admin-table tbody td {
+    text-transform: uppercase;
+}
+
+/* But do NOT uppercase code / badges / icons */
+.admin-table tbody td code,
+.admin-table tbody td .admin-badge,
+.admin-table tbody td i,
+.admin-table tbody td svg {
+    text-transform: none;
+}

@@ -40,14 +40,14 @@
                 </thead>
 
                 <tbody>
-                @forelse($pickerResults as $ex)
+                @forelse($this->pickerResults as $ex)
                     <tr>
                         <td class="pe-4">{{ $ex->name }}</td>
                         <td class="ps-4">{{ $ex->mobile }}</td>
                         <td class="text-end">
                             @if($isAddingAdditional)
                                 <button wire:click="addAdditionalExaminer({{ $ex->id }})"
-                                        class="btn btn-success btn-xs">
+                                        class="btn btn-primary btn-xs">
                                     Add
                                 </button>
                             @else
@@ -70,11 +70,11 @@
         </div>
 
         <div class="mt-3 flex justify-center">
-            {{ $pickerResults->links() }}
+            {{ $this->pickerResults->links() }}
         </div>
 
         <div class="mt-4 text-center">
-            <button class="btn btn-info" wire:click="openAddModal">
+            <button class="btn btn-primary" wire:click="openAddModal">
                 + Add Examiner
             </button>
         </div>

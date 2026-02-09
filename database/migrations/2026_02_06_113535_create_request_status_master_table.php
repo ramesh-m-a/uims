@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('is_final')->default(false);
 
             $table->string('colour')->nullable();
-            $table->unsignedSmallInteger('status_od')->nullable();
+            $table->unsignedSmallInteger('status_id')->nullable();
 
             $table->timestamps();
         });

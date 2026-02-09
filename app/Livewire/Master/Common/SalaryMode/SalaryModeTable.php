@@ -4,12 +4,13 @@ namespace App\Livewire\Master\Common\SalaryMode;
 
 use App\Livewire\Master\Concerns\MasterFormBase;
 use App\Livewire\Master\MasterTableBase;
+use App\Models\Master\Common\SalaryMode;
 
 class SalaryModeTable extends MasterTableBase
 {
     use MasterFormBase;
 
-    protected string $modelClass = Bank::class;
+    protected string $modelClass = SalaryMode::class;
 
     public string $pageRoute = '';
 
@@ -26,35 +27,35 @@ class SalaryModeTable extends MasterTableBase
 
     protected function permissionPrefix(): string
     {
-        return 'master.common.salary-mode.salary-mode';
+        return 'master.common.salary-mode';
     }
 
     protected function configKey(): string
     {
-        return 'master.common.salary-mode.salary-mode';
+        return 'master.common.salary-mode';
     }
 
     protected function formDefaults(): array
     {
         return [
-            'mas_bank_name'       => '',
-            'mas_bank_status_id'  => 1,
+            'mas_salary_mode_name'       => '',
+            'mas_salary_mode_status_id'  => 1,
         ];
     }
 
     protected function rules(): array
     {
         return [
-            'form.mas_bank_name'      => 'required|string|max:150|unique:mas_bank,mas_bank_name,' . $this->editingId,
-            'form.mas_bank_status_id'=> 'required|integer',
+            'form.mas_salary_mode_name'      => 'required|string|max:150|unique:mas_salary_mode,mas_salary_mode_name,' . $this->editingId,
+            'form.mas_salary_mode_status_id'=> 'required|integer',
         ];
     }
 
     protected function validationAttributes(): array
     {
         return [
-            'form.mas_bank_name'      => 'Bank Name',
-            'form.mas_bank_status_id'=> 'Status',
+            'form.mas_salary_mode_name'      => 'Bank Name',
+            'form.mas_salary_mode_status_id'=> 'Status',
         ];
     }
 
@@ -68,7 +69,7 @@ class SalaryModeTable extends MasterTableBase
         $this->selectAll = count($this->selected) === count($this->pageIds);
 
         return view('livewire.master.common.salary-mode.salary-mode-table', [
-            'banks'          => $rows,
+            'salaryModes'          => $rows,
             'columns'        => $this->columns(),
             'search'         => $this->search,
             'perPage'        => $this->perPage,
