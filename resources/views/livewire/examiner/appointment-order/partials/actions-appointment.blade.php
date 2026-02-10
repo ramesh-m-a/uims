@@ -8,6 +8,8 @@
 
     $allApproved = $safeDateRows->every(function($r) use ($requestStatusMap) {
 
+        $r = is_array($r) ? (object) $r : $r;
+
         $statusData = $requestStatusMap[$r->batch_id][$r->examiner_id] ?? null;
 
         $label = strtolower(trim(

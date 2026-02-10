@@ -4,6 +4,7 @@ namespace App\Livewire\Examiner\Allocation;
 
 use App\Livewire\Concerns\NormalizesDates;
 use App\Services\ExaminerAllocation\AllocationContext;
+use App\Support\Examiner\ExaminerUniversalSort;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -13,6 +14,7 @@ class AllocationTable extends Component
 {
     use WithPagination;
     use NormalizesDates;
+    use ExaminerUniversalSort;
 
     protected string $paginationTheme = 'bootstrap';
 
@@ -124,126 +126,6 @@ class AllocationTable extends Component
                     ->toArray();
             })
             ->toArray();
-    }
-    public function mountrefreshissue(
-        \App\Services\ExaminerAllocation\AllocationEngine $engine,
-        \App\Repositories\TempAllocationRepository $tempRepo
-    ): void
-    {
-        $this->userId = auth()->id() ?? 1;
-
-        $this->yearId   = session('allocation.yearId');
-        $this->monthId  = session('allocation.monthId');
-        $this->schemeId = session('allocation.schemeId');
-        $this->degreeId = session('allocation.degreeId');
-
-        if (!$this->yearId || !$this->monthId || !$this->schemeId || !$this->degreeId) {
-            abort(403, 'Invalid allocation session');
-        }
-
-        $context = new AllocationContext(
-            yearId: $this->yearId,
-            monthId: $this->monthId,
-            schemeId: $this->schemeId,
-            degreeId: $this->degreeId,
-            userId: $this->userId,
-            streamId: 6,
-        );
-
-        if (!$tempRepo->existsForContext($context)) {
-            $result = $engine->build($context);
-
-            if ($result->rows->isNotEmpty()) {
-                $tempRepo->store($context, $result->rows);
-            }
-        }
-    }
-
-    public function mountduplicates(
-        \App\Services\ExaminerAllocation\AllocationEngine $engine,
-        \App\Repositories\TempAllocationRepository $tempRepo,
-        \App\Repositories\BatchRepository $batchRepo   // 🔥 NEW
-    ): void
-    {
-        $this->userId = auth()->id() ?? 1;
-
-        $this->yearId   = session('allocation.yearId');
-        $this->monthId  = session('allocation.monthId');
-        $this->schemeId = session('allocation.schemeId');
-        $this->degreeId = session('allocation.degreeId');
-
-        if (!$this->yearId || !$this->monthId || !$this->schemeId || !$this->degreeId) {
-            abort(403, 'Invalid allocation session');
-        }
-
-        $context = new AllocationContext(
-            yearId: $this->yearId,
-            monthId: $this->monthId,
-            schemeId: $this->schemeId,
-            degreeId: $this->degreeId,
-            userId: $this->userId,
-            streamId: 6,
-        );
-
-        /**
-         * 🔥 CRITICAL REGRESSION FIX
-         *
-         * Rebuild temp if:
-         * 1️⃣ No temp rows
-         * 2️⃣ OR batch date changed in source
-         */
-
-        $mustRebuild = false;
-
-        if (!$tempRepo->existsForContext($context)) {
-            $mustRebuild = true;
-        } else {
-
-            // Compare source batch dates vs temp dates
-            $sourceDates = collect(
-                $batchRepo->rangesForScope(
-                    $this->yearId,
-                    $this->monthId,
-                    $this->schemeId,
-                    $this->degreeId,
-                    6
-                )
-            )->pluck('from_date')->unique()->sort()->values();
-
-            $tempDates = DB::table('temp_examiner_assigned_details')
-                ->where('user_id', $this->userId)
-                ->where('year_id', $this->yearId)
-                ->where('month_id', $this->monthId)
-                ->where('scheme_id', $this->schemeId)
-                ->where('degree_id', $this->degreeId)
-                ->pluck('from_date')
-                ->unique()
-                ->sort()
-                ->values();
-
-            if ($sourceDates != $tempDates) {
-                $mustRebuild = true;
-            }
-        }
-
-        if ($mustRebuild) {
-
-            Log::info('Allocation Temp Rebuild Triggered');
-
-            DB::table('temp_examiner_assigned_details')
-                ->where('user_id', $this->userId)
-                ->where('year_id', $this->yearId)
-                ->where('month_id', $this->monthId)
-                ->where('scheme_id', $this->schemeId)
-                ->where('degree_id', $this->degreeId)
-                ->delete();
-
-            $result = $engine->build($context);
-
-            if ($result->rows->isNotEmpty()) {
-                $tempRepo->store($context, $result->rows);
-            }
-        }
     }
 
     public function mount(
@@ -365,7 +247,6 @@ class AllocationTable extends Component
             ->orderByRaw("FIELD(examiner_type,'Internal-C','Internal-A','External-O','External')")
             ->get();
     }
-
 
     /**
      * FULL dataset → used ONLY for LEFT centre list
@@ -949,6 +830,4 @@ class AllocationTable extends Component
 
         $this->dispatch('$refresh');
     }
-
-
 }

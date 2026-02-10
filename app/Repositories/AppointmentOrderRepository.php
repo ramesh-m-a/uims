@@ -10,8 +10,12 @@ class AppointmentOrderRepository
     public function fetchForCollegeContext(AllocationContext $context)
     {
         /** ⭐ STEP 1 — GET BASE ROWS FROM EXISTING WORKING REPO */
-        $baseRows = app(TempAllocationRepository::class)
-            ->fetchForCollegeContext($context);
+        $baseRows = collect(
+            app(TempAllocationRepository::class)
+                ->fetchForCollegeContext($context)
+        )->map(function ($r) {
+            return is_array($r) ? (object) $r : $r;
+        });
 
         if ($baseRows->isEmpty()) {
             return $baseRows;
@@ -36,22 +40,16 @@ class AppointmentOrderRepository
             ->keyBy('allocation_id');
 
         /** ⭐ STEP 4 — MERGE INTO BASE ROW STRUCTURE */
-        return collect($baseRows)
-            ->map(function ($row) use ($orders) {
+        return collect($baseRows)->map(function ($row) use ($orders) {
 
-                $order = $orders[$row->id] ?? null;
+            $row = (object) $row;   // ⭐⭐⭐ CRITICAL LINE ⭐⭐⭐
 
-                $row->order_number = $order->order_number ?? null;
-                $row->pdf_path     = $order->pdf_path ?? null;
+            $order = $orders[$row->id] ?? null;
 
-                return $row;
-            })
-            ->sortBy([
-                ['centre_name', 'asc'],
-                ['batch_name', 'asc'],
-                ['from_date', 'asc'],
-                ['examiner_type', 'asc'], // optional but good
-            ])
-            ->values();
+            $row->order_number = $order->order_number ?? null;
+            $row->pdf_path     = $order->pdf_path ?? null;
+
+            return $row;
+        });
     }
 }

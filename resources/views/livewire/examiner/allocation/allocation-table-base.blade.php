@@ -12,15 +12,22 @@
     <div class="grid grid-cols-12 gap-4 px-4">
 
         @php
-            $grouped = collect($rows ?? [])->groupBy('centre_name');
+            $rowsCollection = collect($rows ?? [])
+                ->map(fn($r) => is_array($r) ? (object) $r : $r);
 
-            if(!empty($centre)) {
-                $centres = collect([$centre]);
-                $activeCentre = $centre;
-            } else {
-                $centres = $grouped->keys();
-                $activeCentre = $centres->first();
-            }
+            $allRowsCollection = collect($allRows ?? $rows ?? [])
+                ->map(fn($r) => is_array($r) ? (object) $r : $r);
+
+            /** ⭐ LEFT PANEL MUST ALWAYS USE FULL DATASET */
+            $grouped = $allRowsCollection->groupBy('centre_name');
+
+                                    if(!empty($centre)) {
+                                        $centres = collect([$centre]);
+                                        $activeCentre = $centre;
+                                    } else {
+                                        $centres = $grouped->keys();
+                                        $activeCentre = $centres->first();
+                                    }
         @endphp
 
         {{-- ================= LEFT PANEL ================= --}}

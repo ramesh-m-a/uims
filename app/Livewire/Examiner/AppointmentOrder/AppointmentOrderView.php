@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Examiner\AppointmentOrder;
 
+use App\Support\Examiner\ExaminerUniversalSort;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\AppointmentOrderRepository;
@@ -9,77 +10,85 @@ use App\Services\ExaminerAllocation\AllocationContext;
 
 class AppointmentOrderView extends Component
 {
+    use ExaminerUniversalSort;
+
     public $yearId;
     public $monthId;
     public $schemeId;
     public $degreeId;
-
-    public $years = [];
-    public $months = [];
-    public $schemes = [];
     public ?string $centre = null;
 
-    public $rows = [];
-    public $requestStatusMap = [];
+    public array $requestStatusMap = [];
 
+    /* =========================================
+       MOUNT
+    ========================================= */
     public function mount()
     {
-        /** 🔐 SECURITY */
-        if (!auth()->check()) {
-            abort(403);
-        }
+        if (!auth()->check()) abort(403);
 
-        /** ⭐ LOAD FILTER DROPDOWNS */
-        $this->years   = DB::table('mas_year')->orderByDesc('id')->get();
-        $this->months  = DB::table('mas_month')->orderBy('id')->get();
-        $this->schemes = DB::table('mas_revised_scheme')->orderByDesc('id')->get();
-
-        /** ⭐ RESTORE SESSION FILTERS */
         $this->yearId   = session('allocation.yearId');
         $this->monthId  = session('allocation.monthId');
         $this->schemeId = session('allocation.schemeId');
         $this->degreeId = session('allocation.degreeId');
 
-        if ($this->yearId && $this->monthId && $this->schemeId && $this->degreeId) {
-            $this->loadData();
-        }
+        $this->buildRequestStatusMap();
     }
 
-    public function updated($field)
+    /* =========================================
+       ⭐ STATELESS SOURCE OF TRUTH
+    ========================================= */
+    protected function baseQuery()
     {
-        if (in_array($field, [
-            'yearId',
-            'monthId',
-            'schemeId',
-            'degreeId'
-        ])) {
-            $this->loadData();
-        }
-    }
-
-    private function loadData(): void
-    {
-        if (!$this->yearId || !$this->monthId || !$this->schemeId || !$this->degreeId) {
-            $this->rows = collect();
-            return;
-        }
-
         $context = new AllocationContext(
             userId: auth()->id(),
             yearId: (int) $this->yearId,
             monthId: (int) $this->monthId,
             schemeId: (int) $this->schemeId,
             degreeId: (int) $this->degreeId,
-            streamId: auth()->user()->user_stream_id ?? 0,
+            streamId: auth()->user()->user_stream_id ?? 6,
         );
 
-        /** ⭐ LOAD ALLOCATION + APPOINTMENT MERGED DATA */
-        $this->rows = collect(
+        return collect(
             app(AppointmentOrderRepository::class)
                 ->fetchForCollegeContext($context)
-        );
+        )->map(fn($r) => is_array($r) ? (object)$r : $r);
+    }
 
-        /** ⭐ LOAD STATUS MAP (SAME AS ALLOCATION MODULE) */
+    /* =========================================
+       RIGHT PANEL DATA
+    ========================================= */
+    public function getRowsProperty()
+    {
+        return $this->sortExaminerRows(
+            $this->baseQuery()
+                ->when($this->centre, fn($c) =>
+                $c->where('centre_name', $this->centre)
+                )
+                ->values()
+        );
+    }
+
+    /* =========================================
+       LEFT PANEL DATA (FULL DATASET)
+    ========================================= */
+    public function getAllRowsProperty()
+    {
+        return $this->sortExaminerRows(
+            $this->baseQuery()->values()
+        );
+    }
+
+    /* =========================================
+       STATUS MAP (Same Concept as Allocation)
+    ========================================= */
+    private function buildRequestStatusMap(): void
+    {
+        if (!$this->yearId || !$this->monthId || !$this->schemeId) {
+            $this->requestStatusMap = [];
+            return;
+        }
+
         $statusMaster = DB::table('request_status_master as rsm')
             ->leftJoin('mas_status as ms', 'ms.id', '=', 'rsm.status_id')
             ->select(
@@ -106,7 +115,6 @@ class AppointmentOrderView extends Component
             $statusId = (int) $req->college_examiner_request_details_status_id;
 
             $status = $statusMaster[$statusId] ?? null;
-
             if (!$status) continue;
 
             $map[$batchId][$examinerId] = [
@@ -119,38 +127,17 @@ class AppointmentOrderView extends Component
         $this->requestStatusMap = $map;
     }
 
+    /* =========================================
+       RENDER
+    ========================================= */
     public function render()
     {
         return view('livewire.examiner.shared.allocation-table-appointment-wrapper', [
             'rows' => $this->rows,
-            'centre' => $this->centre ?? null,
+            'allRows' => $this->allRows,
+            'centre' => $this->centre,
             'requestStatusMap' => $this->requestStatusMap,
             'isAppointmentModule' => true,
-
-            // ⭐ CRITICAL
-          //  'actionsView' => 'livewire.examiner.appointment-order.partials.actions-appointment',
         ]);
     }
-
-    private function sortRows($collection)
-    {
-        return collect($collection)
-            ->sortBy([
-                ['centre_name', 'asc'],
-                ['batch_name', 'asc'],
-                ['from_date', 'asc'],
-            ])
-            ->values();
-    }
-
-    public function getRowsProperty()
-    {
-        return $this->sortRows($this->rows);
-    }
-
-    public function getAllRowsProperty()
-    {
-        return $this->sortRows($this->rows);
-    }
-
 }

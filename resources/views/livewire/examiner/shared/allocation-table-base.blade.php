@@ -95,9 +95,16 @@
                                                 </thead>
 
                                                 <tbody>
+                                                @php
+                                                    $dateRows = collect($dateRows)->map(function($r){
+                                                        return is_array($r) ? (object) $r : $r;
+                                                    });
+                                                @endphp
+
                                                 @foreach($dateRows as $row)
 
                                                     @php
+                                                        $row = is_array($row) ? (object) $row : $row;
                                                         $statusData = $requestStatusMap[$row->batch_id][$row->examiner_id] ?? null;
                                                     @endphp
 
