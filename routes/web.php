@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\TeacherApprovalController;
 use App\Http\Controllers\Audit\ProfileAuditController;
 use App\Http\Controllers\Auth\ForcePasswordController;
+use App\Http\Controllers\Examiner\AppointmentOrderDownloadController;
 use App\Http\Controllers\Examiner\AppointmentOrderVerifyController;
 use App\Http\Controllers\ExaminerAllocationTestController;
 
@@ -638,6 +639,20 @@ Route::get('/verify-order/{orderNumber}',
     [AppointmentOrderVerifyController::class, 'verify']
 );
 
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get(
+        '/examiner/appointment-orders/{order}/view',
+        [AppointmentOrderDownloadController::class, 'view']
+    )->name('appointment-orders.view');
+
+    Route::get(
+        '/examiner/appointment-orders/{order}/download',
+        [AppointmentOrderDownloadController::class, 'download']
+    )->name('appointment-orders.download');
+
+});
 
 /*Route::prefix('examiner/appointment-order')->group(function () {
 

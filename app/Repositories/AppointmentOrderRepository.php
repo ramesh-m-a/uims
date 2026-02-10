@@ -32,6 +32,7 @@ class AppointmentOrderRepository
         $orders = DB::table('appointment_orders')
             ->whereIn('allocation_id', $allocationIds)
             ->select([
+                'id',
                 'allocation_id',
                 'order_number',
                 'pdf_path'
@@ -46,8 +47,9 @@ class AppointmentOrderRepository
 
             $order = $orders[$row->id] ?? null;
 
-            $row->order_number = $order->order_number ?? null;
-            $row->pdf_path     = $order->pdf_path ?? null;
+            $row->appointment_order_id = $order->id ?? null;   // ⭐ ADD THIS
+            $row->order_number         = $order->order_number ?? null;
+            $row->pdf_path             = $order->pdf_path ?? null;
 
             return $row;
         });

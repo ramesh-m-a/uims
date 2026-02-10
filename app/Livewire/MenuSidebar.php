@@ -18,6 +18,10 @@ class MenuSidebar extends Component
     {
         $user = auth()->user();
 
+        if (!$user) {
+            return;
+        }
+
        // dd($user->user_role_id);
         // -------------------------------------------------
         // FETCH EXAMINER REQUEST COUNTS (ONCE)

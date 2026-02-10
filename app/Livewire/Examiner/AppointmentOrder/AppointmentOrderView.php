@@ -140,4 +140,33 @@ class AppointmentOrderView extends Component
             'isAppointmentModule' => true,
         ]);
     }
+
+    public function generateAppointmentOrder($allocationId)
+    {
+        $alloc = DB::table('temp_examiner_assigned_details')
+            ->where('id', $allocationId)
+            ->first();
+
+        if (!$alloc) return;
+
+        app(\App\Services\Examiner\AppointmentOrderService::class)
+            ->generateIfMissing($alloc);
+
+        $this->dispatch('$refresh');
+    }
+
+    public function retryAppointmentPdf($allocationId)
+    {
+        $order = DB::table('appointment_orders')
+            ->where('allocation_id', $allocationId)
+            ->where('is_latest', 1)
+            ->first();
+
+        if (!$order) return;
+
+        \App\Jobs\GenerateAppointmentOrderPdfJob::dispatch($order->id);
+
+        $this->dispatch('$refresh');
+    }
+
 }

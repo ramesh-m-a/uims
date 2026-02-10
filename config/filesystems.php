@@ -60,6 +60,12 @@ return [
             'report' => false,
         ],
 
+        'orders' => [
+            'driver' => 'local',
+            'root' => storage_path('app/orders'),
+            'throw' => false,
+        ],
+
     ],
 
     /*
@@ -76,5 +82,6 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
     ],
+
 
 ];

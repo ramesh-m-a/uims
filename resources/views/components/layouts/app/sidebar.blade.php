@@ -51,11 +51,11 @@
         {{-- FIRST CHILD = TRIGGER (Flux-compatible) --}}
         <div
             x-data="{
-        src: '{{ auth()->user()->avatar_url }}',
-        refresh() {
-            this.src = '{{ auth()->user()->avatar_url }}' + '?v=' + Date.now();
-        }
-    }"
+    src: '{{ auth()->user()?->avatar_url ?? "" }}',
+    refresh() {
+        this.src = '{{ auth()->user()?->avatar_url ?? "" }}' + '?v=' + Date.now();
+    }
+}"
             x-on:profile-photo-updated.window="refresh()"
         >
             <button
@@ -66,7 +66,7 @@
                 <livewire:sidebar-user-avatar />
 
                 <span class="flex-1 truncate text-left text-sm font-medium">
-            {{ auth()->user()->name }}
+            {{ auth()->user()?->name ?? 'Guest' }}
         </span>
 
                 <flux:icon name="chevrons-up-down" />

@@ -1,4 +1,4 @@
-<div class="space-y-4 relative">
+<div class="space-y-4 relative" wire:poll.visible.5s>
 
     {{-- ========================= BREADCRUMB ========================= --}}
     <div class="breadcrumb-bar">
@@ -26,6 +26,6 @@
         'isAppointmentModule' => true
     ])
 
-    {{-- 🚫 NO DRAWERS HERE (APPOINTMENT MODULE) --}}
+{{-- 🚫 NO DRAWERS HERE (APPOINTMENT MODULE) --}}
 
 </div>

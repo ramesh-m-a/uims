@@ -14,7 +14,7 @@ class SidebarUserAvatar extends Component
     public function render()
     {
         return view('livewire.sidebar-user-avatar', [
-            'user' => Auth::user()->fresh(), // 🔥 force DB refresh
+            'user' => Auth::user()?->fresh(),
         ]);
     }
 }

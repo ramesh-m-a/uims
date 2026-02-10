@@ -76,7 +76,7 @@ class AppointmentOrderService
                 'order_version' => $version,
                 'is_latest'     => true,
 
-                'generated_by'  => Auth::id(),
+                'generated_by'  => Auth::id() ?? 1,
                 'generated_role'=> $extra['generated_role'] ?? 'SYSTEM',
                 'generated_at'  => $generatedAt,
 
@@ -159,6 +159,30 @@ class AppointmentOrderService
     private function temporaryOrderNumber()
     {
         return 'TEMP-' . strtoupper(Str::random(10));
+    }
+
+    public function generateIfMissing($allocation, array $extra = [])
+    {
+        return DB::transaction(function () use ($allocation, $extra) {
+
+            /** 🔒 LOCK EXISTING LATEST ROW */
+            $latest = AppointmentOrder::where('allocation_id', $allocation->id)
+                ->where('is_latest', true)
+                ->lockForUpdate()
+                ->first();
+
+            if ($latest) {
+                return $latest; // ✅ Already exists
+            }
+
+            /** ⭐ CREATE NEW ORDER */
+            $order = $this->generate($allocation, $extra);
+
+            /** ⭐ DISPATCH PDF JOB */
+            \App\Jobs\GenerateAppointmentOrderPdfJob::dispatch($order->id);
+
+            return $order;
+        });
     }
 
 }
