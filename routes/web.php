@@ -652,6 +652,16 @@ Route::middleware(['auth'])->group(function () {
         [AppointmentOrderDownloadController::class, 'download']
     )->name('appointment-orders.download');
 
+    Route::get(
+        '/examiner/charts/{allocation}/view',
+        [ChartDownloadController::class, 'view']
+    )->name('charts.view');
+
+    Route::get(
+        '/examiner/charts/{allocation}/download',
+        [ChartDownloadController::class, 'download']
+    )->name('charts.download');
+
 });
 
 /*Route::prefix('examiner/appointment-order')->group(function () {

@@ -6,7 +6,7 @@
     <div class="breadcrumb-bar">
         @include('partials.breadcrumb', [
             'route' => request()->route()?->getName() ?? '',
-            'title' => 'Examiner Allocation',
+            'title' => 'Examiner Allocation same blade',
             'mode'  => 'View / Allocate'
         ])
     </div>

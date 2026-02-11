@@ -66,6 +66,12 @@ return [
             'throw' => false,
         ],
 
+        'charts' => [
+            'driver' => 'local',
+            'root' => storage_path('app/charts'),
+            'throw' => false,
+        ],
+
     ],
 
     /*

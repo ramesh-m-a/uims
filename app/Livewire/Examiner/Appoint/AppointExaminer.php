@@ -12,43 +12,73 @@ class AppointExaminer extends Component
     public ?int $schemeId = null;
     public ?int $degreeId = null;
 
+    /* =========================================
+       🔐 MOUNT — TOKEN ENTRY ONLY
+    ========================================= */
     public function mount(): void
     {
-        // Handle token → redirect to allocation
-        if (request()->filled('token')) {
-            try {
-                [$yearId, $monthId, $schemeId, $degreeId] = $this->decryptToken(request()->get('token'));
+        if (!request()->filled('token')) {
+            return;
+        }
 
-              /*  $this->redirect(route('examiner.allocation', [
-                    'yearId'   => $yearId,
-                    'monthId'  => $monthId,
-                    'schemeId' => $schemeId,
-                    'degreeId' => $degreeId,
-                ]));*/
+        if (request()->filled('m')) {
+            session([
+                'appoint.module' => request('m') === 'a'
+                    ? 'appointment'
+                    : 'allocation'
+            ]);
+        }
 
-                session([
-                    'allocation.yearId'   => $yearId,
-                    'allocation.monthId'  => $monthId,
-                    'allocation.schemeId' => $schemeId,
-                    'allocation.degreeId' => $degreeId,
-                ]);
+        try {
 
-                if (auth()->user()->user_role_id === 3) {
-                    // College → Go to college allocation screen
-                    $this->redirect(route('examiner.college.allocation'));
-                } else {
-                    // Admin → Go to admin allocation screen
-                    $this->redirect(route('examiner.allocation'));
-                }
+            $data = $this->decryptToken(request()->get('token'));
 
-                return;
-            } catch (\Throwable $e) {
-                // Do NOT logout here during development
-                abort(403, 'Invalid or expired token');
+            /**
+             * ⭐ EXPIRY CHECK
+             */
+            if (!empty($data['exp']) && now()->timestamp > $data['exp']) {
+                abort(403, 'Token expired');
             }
+
+            /**
+             * ⭐ SESSION CONTEXT
+             */
+            session([
+                'allocation.yearId'   => (int)$data['year_id'],
+                'allocation.monthId'  => (int)$data['month_id'],
+                'allocation.schemeId' => (int)$data['scheme_id'],
+                'allocation.degreeId' => (int)$data['degree_id'],
+            ]);
+
+            /**
+             * ⭐ MODULE SWITCH (TOKEN ONLY)
+             */
+            $module = $data['module'] ?? 'allocation';
+
+            if ($module === 'appointment') {
+                $this->redirect(route('examiner.appointment-order.view'));
+                return;
+            }
+
+            /**
+             * ⭐ DEFAULT FLOW (NO BREAKING CHANGE)
+             */
+            if (auth()->user()->user_role_id === 3) {
+                $this->redirect(route('examiner.college.allocation'));
+            } else {
+                $this->redirect(route('examiner.allocation'));
+            }
+
+        } catch (\Throwable $e) {
+
+            abort(403, 'Invalid or expired token');
+
         }
     }
 
+    /* =========================================
+       RENDER
+    ========================================= */
     public function render()
     {
         return view('livewire.examiner.appoint.appoint-examiner', [
@@ -73,6 +103,9 @@ class AppointExaminer extends Component
         ]);
     }
 
+    /* =========================================
+       DROPDOWN FLOW
+    ========================================= */
     public function updatedYearId()
     {
         $this->monthId = null;
@@ -97,19 +130,30 @@ class AppointExaminer extends Component
             return;
         }
 
+        /**
+         * ⭐ DEFAULT MODULE (ALLOCATION)
+         * Menu entry can override later
+         */
+        $module = session('appoint.module', 'allocation');
+
         $token = $this->generateToken([
             'year_id'   => $this->yearId,
             'month_id'  => $this->monthId,
             'scheme_id' => $this->schemeId,
             'degree_id' => $this->degreeId,
+            'module'    => $module,
+            'exp'       => now()->addMinutes(30)->timestamp,
         ]);
 
         $this->redirect("/examiner/appoint?token={$token}");
     }
 
+    /* =========================================
+       🔐 TOKEN GENERATION
+    ========================================= */
     private function generateToken(array $data): string
     {
-        $key = substr('rguhs_teacher_portal_2024', 0, 16);
+        $key = substr(config('app.key'), 0, 16);
 
         $json = json_encode($data, JSON_UNESCAPED_SLASHES);
 
@@ -123,14 +167,18 @@ class AppointExaminer extends Component
         return bin2hex($cipherRaw);
     }
 
+    /* =========================================
+       🔐 TOKEN DECRYPT
+    ========================================= */
     private function decryptToken(string $hex): array
     {
         $cipherRaw = hex2bin($hex);
+
         if ($cipherRaw === false) {
-            throw new \RuntimeException('Invalid hex');
+            throw new \RuntimeException('Invalid token');
         }
 
-        $key = substr('rguhs_teacher_portal_2024', 0, 16);
+        $key = substr(config('app.key'), 0, 16);
 
         $json = openssl_decrypt(
             $cipherRaw,
@@ -143,14 +191,7 @@ class AppointExaminer extends Component
             throw new \RuntimeException('Decrypt failed');
         }
 
-        $data = json_decode($json, true);
-
-        return [
-            (int)($data['year_id'] ?? 0),
-            (int)($data['month_id'] ?? 0),
-            (int)($data['scheme_id'] ?? 0),
-            (int)($data['degree_id'] ?? 0),
-        ];
+        return json_decode($json, true) ?? [];
     }
 
     public function resetFilters(): void

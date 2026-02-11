@@ -1,6 +1,13 @@
 <?php
 
 use Carbon\Carbon;
+use App\Support\Nav\UimsNav;
+
+/*
+|--------------------------------------------------------------------------
+| DATE HELPERS
+|--------------------------------------------------------------------------
+*/
 
 if (!function_exists('date_display')) {
     function date_display($date)
@@ -23,5 +30,18 @@ if (!function_exists('date_input')) {
     {
         if (!$date) return null;
         return Carbon::parse($date)->format('Y-m-d');
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| UIMS NAV HELPERS ⭐
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('navActiveModule')) {
+    function navActiveModule(string $module): bool
+    {
+        return UimsNav::module($module);
     }
 }

@@ -1,4 +1,5 @@
 {{-- 🚫 NEVER RUN INSIDE ALLOCATION MODULE --}}
+
 @php
     $isAppointmentModule = $isAppointmentModule ?? false;
     $requestStatusMap = $requestStatusMap ?? [];

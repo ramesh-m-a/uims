@@ -549,34 +549,28 @@ class MenuSidebar extends Component
                     [
                         'title' => 'Examiner',
                         'icon'  => 'user-secret',
+                        'active'=> navActiveModule('appointment'),
                         'children' => [
 
                             [
                                 'title' => 'Appointment Order',
                                 'icon'  => 'file-signature',
+                                'active'=> navActiveModule('appointment'),
                                 'children' => [
-                                    [
-                                        'title'  => 'Generate',
-                                        'icon'   => 'file-circle-plus',
-                                        'href'   => '',
-                                        'active' => '',
-                                    ],
                                     [
                                         'title'  => 'View',
                                         'icon'   => 'file-lines',
-                                        'href'   => '',
-                                        'active' => '',
+                                        'href'   => $urlFor('examiner.appoint') . '?m=a',
+                                        'active' => navActiveModule('appointment'),
+                                    ],
+                                    [
+                                        'title'  => 'Chart',
+                                        'icon'   => 'chart-column',
+                                        'href'  => $urlFor('examiner.appoint'),
+                                        'active'=> $isActive('examiner.appoint'),
                                     ],
                                 ],
                             ],
-
-                            [
-                                'title'  => 'Chart',
-                                'icon'   => 'chart-column',
-                                'href'   => '',
-                                'active' => '',
-                            ],
-
                         ],
                     ],
 

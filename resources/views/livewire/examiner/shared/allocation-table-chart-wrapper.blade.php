@@ -4,7 +4,7 @@
     <div class="breadcrumb-bar">
         @include('partials.breadcrumb', [
             'route' => request()->route()?->getName() ?? '',
-            'title' => 'Examiner Appointment Order',
+            'title' => 'Exam Chart',
             'mode'  => 'View / Download'
         ])
     </div>
@@ -12,7 +12,7 @@
     {{-- ========================= HEADER ========================= --}}
     <div class="flex justify-between items-center px-4">
         <h1 class="text-lg font-semibold text-gray-700">
-            Examiner Appointment Order
+            Exam Chart
             <span class="mx-1 text-gray-400">››</span>
             <span class="text-gray-400">View / Download</span>
         </h1>
@@ -21,10 +21,11 @@
     {{-- ========================= BASE TABLE ========================= --}}
     @include('livewire.examiner.shared.allocation-table-base', [
         'rows' => $rows,
-        'requestStatusMap' => $requestStatusMap,
+        'requestStatusMap' => $requestStatusMap ?? [],
         'centre' => $centre ?? null,
-        'isAppointmentModule' => true
+        'isChartModule' => true
     ])
 
-{{-- 🚫 NO DRAWERS HERE (APPOINTMENT MODULE) --}}
+{{-- 🚫 NO DRAWERS HERE (CHART MODULE) --}}
+
 </div>
